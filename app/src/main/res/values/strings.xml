@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Corona Tracker App</string>
+    <string name="btnExit">Exit</string>
+    <string name="txtCountryName">Country Name</string>
+    <string name="txtCases">Cases:</string>
+    <string name="txtDeaths">Deaths:</string>
+    <string name="imgCountryFlagDescription">Current country flag</string>
+    <string name="txtUserRating">User rating:</string>
+    <string name="txtUserNotes">User notes:</string>
+    <string name="btnBack">Back</string>
+    <string name="btnEdit">Edit</string>
+    <string name="txtEditNoteHints">Enter your notes here…</string>
+    <string name="txtShowNoteHints">There are no notes to display.</string>
+    <string name="btnCancel">Cancel</string>
+    <string name="btnOk">Ok</string>
+</resources>

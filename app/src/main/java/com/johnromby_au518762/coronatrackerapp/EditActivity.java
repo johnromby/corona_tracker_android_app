@@ -12,16 +12,16 @@ import android.widget.TextView;
 
 public class EditActivity extends AppCompatActivity {
 
+    // For debugging
     private static final String TAG = "EditActivity";
 
     // Widgets:
-    ImageView imgFlag;
-    TextView txtCountryName, txtUserRatingNum, txtMLUserNotes;
-    SeekBar seekBarUserRating;
-    Button btnCancel, btnOk;
+    private ImageView imgFlag;
+    private TextView txtCountryName, txtUserRatingNum, txtMLUserNotes;
+    private SeekBar seekBarUserRating;
 
     // Data holder
-    Country selectedCountry;
+    private Country selectedCountry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,18 +54,18 @@ public class EditActivity extends AppCompatActivity {
         });
 
         // Buttons
-        btnCancel = findViewById(R.id.btnCancel);
+        Button btnCancel = findViewById(R.id.btnCancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        btnOk = findViewById(R.id.btnOk);
+        Button btnOk = findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: update selectedCountry object and return it to DetailsActivity
+                goBackToDetailsActivity();
             }
         });
 
@@ -74,13 +74,25 @@ public class EditActivity extends AppCompatActivity {
         // Using Parcelable is based on YouTube video: https://www.youtube.com/watch?v=WBbsvqSu0is
         selectedCountry = intent.getParcelableExtra(Constants.SELECTED_COUNTRY);
         // Calling method for updating the view with data from the passed object
-        updateView(selectedCountry);
+        updateView();
     }
 
-    private void updateView(Country country) {
-        imgFlag.setImageResource(country.flagImgResId);
-        txtCountryName.setText(country.countryName);
-        txtUserRatingNum.setText("" + country.userRating);
-        txtMLUserNotes.setText(country.userNote);
+    private void goBackToDetailsActivity() {
+        selectedCountry.userRating = Double.parseDouble(txtUserRatingNum.getText().toString());
+        selectedCountry.userNote = txtMLUserNotes.getText().toString();
+
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra(Constants.SELECTED_COUNTRY, selectedCountry);
+        setResult(RESULT_OK, resultIntent);
+        finish();
+    }
+
+    private void updateView() {
+        imgFlag.setImageResource(selectedCountry.flagImgResId);
+        txtCountryName.setText(selectedCountry.countryName);
+        txtUserRatingNum.setText(String.valueOf(selectedCountry.userRating));
+        txtMLUserNotes.setText(selectedCountry.userNote);
+
+        seekBarUserRating.setProgress((int) (selectedCountry.userRating * 10));
     }
 }

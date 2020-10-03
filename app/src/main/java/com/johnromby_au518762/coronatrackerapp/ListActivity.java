@@ -6,6 +6,7 @@
 
 package com.johnromby_au518762.coronatrackerapp;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 
 public class ListActivity extends AppCompatActivity implements CountryAdapter.ICountryItemClickedListener {
 
+    // For debugging
     private static final String TAG = "ListActivity";
 
     // Widgets:
@@ -107,11 +109,33 @@ public class ListActivity extends AppCompatActivity implements CountryAdapter.IC
         openDetailsActivity(countries.get(index));
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Constants.REQUEST_CODE_DETAILS) {
+            if (resultCode == RESULT_OK) {
+                Country selectedCountry = data.getParcelableExtra(Constants.SELECTED_COUNTRY);
+                updateArray(selectedCountry);
+            }
+        }
+    }
+
+    private void updateArray(Country selectedCountry) {
+        for (Country stats : countries) {
+            if (stats.flagImgResId == selectedCountry.flagImgResId) {
+                countries.set(countries.indexOf(stats), selectedCountry);
+                return;
+            }
+        }
+    }
+
     private void openDetailsActivity(Country country) {
         Intent intent = new Intent(this, DetailsActivity.class);
         intent.putExtra(Constants.SELECTED_COUNTRY, country);
 
         // Using startActivityForResult() and not just startActivity() since we are expecting something back.
+        // onActivityResult() will handle the callback data.
         startActivityForResult(intent, Constants.REQUEST_CODE_DETAILS);
     }
 }

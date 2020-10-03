@@ -1,5 +1,6 @@
 package com.johnromby_au518762.coronatrackerapp;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -8,9 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class DetailsActivity extends AppCompatActivity {
 
+    // For debugging
     private static final String TAG = "DetailsActivity";
 
     // Widgets:
@@ -34,6 +37,7 @@ public class DetailsActivity extends AppCompatActivity {
         txtUserRatingNum = findViewById(R.id.txtUserRatingNum);
         txtMLUserNotes = findViewById(R.id.txtMLUserNotes);
 
+        // Disable note text input, since we do not want to edit it here
         txtMLUserNotes.setEnabled(false);
 
         // Buttons
@@ -56,28 +60,45 @@ public class DetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         // Using Parcelable is based on YouTube video: https://www.youtube.com/watch?v=WBbsvqSu0is
         selectedCountry = intent.getParcelableExtra(Constants.SELECTED_COUNTRY);
+
         // Calling method for updating the view with data from the passed object
         updateView(selectedCountry);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Constants.REQUEST_CODE_EDIT) {
+            if (resultCode == RESULT_OK) {
+                selectedCountry = data.getParcelableExtra(Constants.SELECTED_COUNTRY);
+                updateView(selectedCountry);
+            }
+            if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(DetailsActivity.this,"Canceled by user", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void goBackToListActivity() {
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra(Constants.SELECTED_COUNTRY, selectedCountry);
+        setResult(RESULT_OK, resultIntent);
+        finish();
+    }
+
     private void openEditActivity() {
-        // TODO: Open EditActivity with passed data.
         Intent intent = new Intent(this, EditActivity.class);
         intent.putExtra(Constants.SELECTED_COUNTRY, selectedCountry);
         startActivityForResult(intent, Constants.REQUEST_CODE_EDIT);
     }
 
-    private void goBackToListActivity() {
-        // TODO: Send data back to ListActivity if it has changed.
-        finish();
-    }
-
     private void updateView(Country country) {
         imgFlag.setImageResource(country.flagImgResId);
         txtCountryName.setText(country.countryName);
-        txtCasesNum.setText("" + country.numInfected);
-        txtDeathsNum.setText("" + country.numDeath);
-        txtUserRatingNum.setText("" + country.userRating);
+        txtCasesNum.setText(String.valueOf(country.numInfected));
+        txtDeathsNum.setText(String.valueOf(country.numDeath));
+        txtUserRatingNum.setText(String.valueOf(country.userRating));
         txtMLUserNotes.setText(country.userNote);
     }
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Corona Tracker App</string>
+    <string name="btnExit">Luk</string>
+    <string name="txtCountryName">Nations Navn</string>
+    <string name="txtCases">Tilfælde:</string>
+    <string name="txtDeaths">Dødsfald:</string>
+    <string name="txtUserRating">Bedømmelse:</string>
+    <string name="txtUserNotes">Noter:</string>
+    <string name="btnBack">Tilbage</string>
+    <string name="btnEdit">Rediger</string>
+    <string name="txtEditNoteHints">Skriv dine noter her…</string>
+    <string name="txtShowNoteHints">Der findes ingen noter at vise.</string>
+    <string name="btnCancel">Annuller</string>
+    <string name="btnOk">Ok</string>
+    <string name="imgCountryFlagDescription">Aktuelle nations flag</string>
+</resources>

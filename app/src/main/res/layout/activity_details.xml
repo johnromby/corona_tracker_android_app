@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/activityBackgroundColor"
     tools:context=".DetailsActivity">
 
     <ImageView
@@ -110,12 +111,12 @@
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:layout_marginBottom="8dp"
+        android:clickable="false"
         android:ems="10"
+        android:focusable="false"
         android:gravity="start|top"
         android:hint="@string/txtShowNoteHints"
         android:inputType="textMultiLine"
-        android:focusable="false"
-        android:clickable="false"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/txtUserNotes"

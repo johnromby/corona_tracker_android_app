@@ -6,6 +6,7 @@
 
 package com.johnromby_au518762.coronatrackerapp;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -42,6 +43,8 @@ public class ListActivity extends AppCompatActivity implements CountryAdapter.IC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
+
+
         // Recyclerview Set-up (Adapter and Layout Manager)
         adapter = new CountryAdapter(this);
         rcvList = findViewById(R.id.rcvCountries);
@@ -49,7 +52,11 @@ public class ListActivity extends AppCompatActivity implements CountryAdapter.IC
         rcvList.setAdapter(adapter);
 
         // Creating data and updating the Adapter/RecycleView
-        createData();
+        if (savedInstanceState != null) {
+            countries = savedInstanceState.getParcelableArrayList(Constants.COUNTRIES_ARRAY);
+        } else {
+            createData();
+        }
         adapter.updateCountryList(countries);
 
         // Button(s) handle
@@ -119,6 +126,13 @@ public class ListActivity extends AppCompatActivity implements CountryAdapter.IC
                 updateArray(selectedCountry);
             }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putParcelableArrayList(Constants.COUNTRIES_ARRAY, countries);
     }
 
     private void updateArray(Country selectedCountry) {

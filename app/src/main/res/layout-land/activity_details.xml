@@ -11,35 +11,37 @@
         android:id="@+id/imgFlag"
         android:layout_width="96dp"
         android:layout_height="96dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginLeft="48dp"
         android:layout_marginTop="16dp"
         android:contentDescription="@string/imgCountryFlagDescription"
-        app:layout_constraintEnd_toEndOf="@+id/txtCountryName"
-        app:layout_constraintStart_toStartOf="@+id/txtCountryName"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/dk" />
 
     <TextView
         android:id="@+id/txtCountryName"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
         android:text="@string/txtCountryName"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/imgFlag"
+        app:layout_constraintStart_toStartOf="@+id/imgFlag"
         app:layout_constraintTop_toBottomOf="@+id/imgFlag" />
 
     <TextView
         android:id="@+id/txtCases"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
         android:layout_marginBottom="8dp"
         android:text="@string/txtCases"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/txtDeaths"
-        app:layout_constraintStart_toStartOf="@+id/txtCountryName" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/txtDeaths"

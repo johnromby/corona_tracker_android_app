@@ -8,6 +8,7 @@ package com.johnromby_au518762.coronatrackerapp;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringDef;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,12 +31,12 @@ public class ListActivity extends AppCompatActivity implements CountryAdapter.IC
     // For debugging
     private static final String TAG = "ListActivity";
 
-    // Widgets:
+    // Widgets
     private RecyclerView rcvList;
     private CountryAdapter adapter;
     private Button btnExit;
 
-    // Data:
+    // Data
     private ArrayList<Country> countries;
 
     @Override
@@ -43,7 +44,8 @@ public class ListActivity extends AppCompatActivity implements CountryAdapter.IC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-
+        // Activity title
+        setTitle(getResources().getText(R.string.app_name) + " - " + getResources().getText(R.string.listActivityTitle));
 
         // Recyclerview Set-up (Adapter and Layout Manager)
         adapter = new CountryAdapter(this);

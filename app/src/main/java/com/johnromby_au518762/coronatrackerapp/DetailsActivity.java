@@ -17,7 +17,7 @@ public class DetailsActivity extends AppCompatActivity {
     // For debugging
     private static final String TAG = "DetailsActivity";
 
-    // Widgets:
+    // Widgets
     ImageView imgFlag;
     TextView txtCountryName, txtCasesNum, txtDeathsNum, txtUserRatingNum, txtMLUserNotes;
     Button btnBack, btnEdit;
@@ -111,5 +111,8 @@ public class DetailsActivity extends AppCompatActivity {
         txtDeathsNum.setText(String.valueOf(selectedCountry.numDeath));
         txtUserRatingNum.setText(String.valueOf(selectedCountry.userRating));
         txtMLUserNotes.setText(selectedCountry.userNote);
+
+        // Activity title
+        setTitle(getResources().getText(R.string.detailsActivityTitle) + ": " + selectedCountry.countryName);
     }
 }

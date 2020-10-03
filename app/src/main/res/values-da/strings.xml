@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Corona Tracker App</string>
+    <string name="app_name">Corona Tracker</string>
     <string name="btnExit">Luk</string>
     <string name="txtCountryName">Nations Navn</string>
     <string name="txtCases">Tilfælde:</string>
@@ -14,4 +14,7 @@
     <string name="btnCancel">Annuller</string>
     <string name="btnOk">Ok</string>
     <string name="imgCountryFlagDescription">Aktuelle nations flag</string>
+    <string name="listActivityTitle">Nationsliste</string>
+    <string name="detailsActivityTitle">Detaljer</string>
+    <string name="editActivityTitle">Rediger</string>
 </resources>

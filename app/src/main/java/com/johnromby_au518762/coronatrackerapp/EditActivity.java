@@ -15,7 +15,7 @@ public class EditActivity extends AppCompatActivity {
     // For debugging
     private static final String TAG = "EditActivity";
 
-    // Widgets:
+    // Widgets
     private ImageView imgFlag;
     private TextView txtCountryName, txtUserRatingNum, txtMLUserNotes;
     private SeekBar seekBarUserRating;
@@ -94,5 +94,8 @@ public class EditActivity extends AppCompatActivity {
         txtMLUserNotes.setText(selectedCountry.userNote);
 
         seekBarUserRating.setProgress((int) (selectedCountry.userRating * 10));
+
+        // Activity title
+        setTitle(getResources().getText(R.string.editActivityTitle) + ": " + selectedCountry.countryName);
     }
 }

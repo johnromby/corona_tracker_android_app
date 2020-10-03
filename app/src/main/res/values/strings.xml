@@ -12,8 +12,9 @@
     <string name="txtEditNoteHints">Enter your notes here…</string>
     <string name="txtShowNoteHints">There are no notes to display.</string>
     <string name="btnCancel">Cancel</string>
-    <string name="btnOk">Ok</string>
+    <string name="btnOk">OK</string>
     <string name="listActivityTitle">List of Countries</string>
     <string name="detailsActivityTitle">Details</string>
     <string name="editActivityTitle">Edit</string>
+    <string name="cancelToast">Canceled by user</string>
 </resources>

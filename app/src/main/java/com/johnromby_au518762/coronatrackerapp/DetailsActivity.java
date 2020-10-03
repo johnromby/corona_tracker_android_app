@@ -79,7 +79,7 @@ public class DetailsActivity extends AppCompatActivity {
                 updateView();
             }
             if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(DetailsActivity.this,"Canceled by user", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DetailsActivity.this, R.string.cancelToast, Toast.LENGTH_SHORT).show();
             }
         }
     }

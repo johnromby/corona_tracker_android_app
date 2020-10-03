@@ -12,9 +12,10 @@
     <string name="txtEditNoteHints">Skriv dine noter her…</string>
     <string name="txtShowNoteHints">Der findes ingen noter at vise.</string>
     <string name="btnCancel">Annuller</string>
-    <string name="btnOk">Ok</string>
+    <string name="btnOk">OK</string>
     <string name="imgCountryFlagDescription">Aktuelle nations flag</string>
     <string name="listActivityTitle">Nationsliste</string>
     <string name="detailsActivityTitle">Detaljer</string>
     <string name="editActivityTitle">Rediger</string>
+    <string name="cancelToast">Annulleret af brugeren</string>
 </resources>

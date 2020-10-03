@@ -1,5 +1,6 @@
 package com.johnromby_au518762.coronatrackerapp;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -58,8 +59,14 @@ public class DetailsActivity extends AppCompatActivity {
         // Using Parcelable is based on YouTube video: https://www.youtube.com/watch?v=WBbsvqSu0is
         selectedCountry = intent.getParcelableExtra(Constants.SELECTED_COUNTRY);
 
+        // Saving state for rotations
+        // Note that edit text fields are saved automatically, so this is only for preserving rating.
+        if (savedInstanceState != null) {
+            selectedCountry = savedInstanceState.getParcelable(Constants.SELECTED_COUNTRY);
+        }
+
         // Calling method for updating the view with data from the passed object
-        updateView(selectedCountry);
+        updateView();
     }
 
     @Override
@@ -69,12 +76,19 @@ public class DetailsActivity extends AppCompatActivity {
         if (requestCode == Constants.REQUEST_CODE_EDIT) {
             if (resultCode == RESULT_OK) {
                 selectedCountry = data.getParcelableExtra(Constants.SELECTED_COUNTRY);
-                updateView(selectedCountry);
+                updateView();
             }
             if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(DetailsActivity.this,"Canceled by user", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putParcelable(Constants.SELECTED_COUNTRY, selectedCountry);
     }
 
     private void goBackToListActivity() {
@@ -90,12 +104,12 @@ public class DetailsActivity extends AppCompatActivity {
         startActivityForResult(intent, Constants.REQUEST_CODE_EDIT);
     }
 
-    private void updateView(Country country) {
-        imgFlag.setImageResource(country.flagImgResId);
-        txtCountryName.setText(country.countryName);
-        txtCasesNum.setText(String.valueOf(country.numInfected));
-        txtDeathsNum.setText(String.valueOf(country.numDeath));
-        txtUserRatingNum.setText(String.valueOf(country.userRating));
-        txtMLUserNotes.setText(country.userNote);
+    private void updateView() {
+        imgFlag.setImageResource(selectedCountry.flagImgResId);
+        txtCountryName.setText(selectedCountry.countryName);
+        txtCasesNum.setText(String.valueOf(selectedCountry.numInfected));
+        txtDeathsNum.setText(String.valueOf(selectedCountry.numDeath));
+        txtUserRatingNum.setText(String.valueOf(selectedCountry.userRating));
+        txtMLUserNotes.setText(selectedCountry.userNote);
     }
 }

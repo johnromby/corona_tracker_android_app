@@ -39,7 +39,7 @@ public class EditActivity extends AppCompatActivity {
         seekBarUserRating.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                txtUserRatingNum.setText(String.format("%.1f", progress * 0.1f));
+                txtUserRatingNum.setText(String.valueOf(progress / 10f));
             }
 
             @Override

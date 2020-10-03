@@ -37,9 +37,6 @@ public class DetailsActivity extends AppCompatActivity {
         txtUserRatingNum = findViewById(R.id.txtUserRatingNum);
         txtMLUserNotes = findViewById(R.id.txtMLUserNotes);
 
-        // Disable note text input, since we do not want to edit it here
-        txtMLUserNotes.setEnabled(false);
-
         // Buttons
         btnBack = findViewById(R.id.btnBack);
         btnBack.setOnClickListener(new View.OnClickListener() {

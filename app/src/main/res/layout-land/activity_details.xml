@@ -12,62 +12,64 @@
         android:layout_height="96dp"
         android:layout_marginTop="16dp"
         android:contentDescription="@string/imgCountryFlagDescription"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/txtCountryName"
+        app:layout_constraintStart_toStartOf="@+id/txtCountryName"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/dk" />
 
     <TextView
         android:id="@+id/txtCountryName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
         android:text="@string/txtCountryName"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/imgFlag"
-        app:layout_constraintStart_toStartOf="@+id/imgFlag"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgFlag" />
 
     <TextView
         android:id="@+id/txtCases"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/txtCases"
+        android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtCountryName" />
+        app:layout_constraintBottom_toTopOf="@+id/txtDeaths"
+        app:layout_constraintStart_toStartOf="@+id/txtCountryName" />
 
     <TextView
         android:id="@+id/txtDeaths"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/txtDeaths"
+        android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/txtCases"
-        app:layout_constraintTop_toBottomOf="@+id/txtCases" />
+        app:layout_constraintBottom_toTopOf="@+id/guideline6"
+        app:layout_constraintStart_toStartOf="@+id/txtCases" />
 
     <TextView
         android:id="@+id/txtUserRating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:text="@string/txtUserRating"
+        android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/txtDeaths"
-        app:layout_constraintTop_toBottomOf="@+id/txtDeaths" />
+        app:layout_constraintBottom_toTopOf="@+id/txtCountryName"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintTop_toTopOf="@+id/imgFlag" />
 
     <TextView
         android:id="@+id/txtCasesNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintStart_toEndOf="@+id/txtDeaths"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/txtDeathsNum"
         app:layout_constraintTop_toTopOf="@+id/txtCases"
         tools:text="XXXXX" />
 
@@ -77,6 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/txtDeaths"
         app:layout_constraintTop_toTopOf="@+id/txtDeaths"
         tools:text="XXXX" />
@@ -87,7 +90,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:textSize="18sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/txtUserRating"
         app:layout_constraintStart_toEndOf="@+id/txtUserRating"
@@ -96,64 +99,61 @@
     <TextView
         android:id="@+id/txtUserNotes"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_height="0dp"
         android:text="@string/txtUserNotes"
+        android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/txtUserRating"
-        app:layout_constraintTop_toBottomOf="@+id/txtUserRating" />
+        app:layout_constraintBottom_toBottomOf="@+id/txtCountryName"
+        app:layout_constraintStart_toStartOf="@+id/txtUserRating" />
 
     <EditText
         android:id="@+id/txtMLUserNotes"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginBottom="2dp"
+        android:clickable="false"
         android:ems="10"
+        android:focusable="false"
         android:gravity="start|top"
         android:hint="@string/txtShowNoteHints"
         android:inputType="textMultiLine"
-        android:focusable="false"
-        android:clickable="false"
-        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        app:layout_constraintBottom_toTopOf="@+id/guideline6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/txtUserNotes"
         app:layout_constraintTop_toBottomOf="@+id/txtUserNotes"
         tools:text="@tools:sample/lorem/random" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.85130113" />
-
     <Button
         android:id="@+id/btnEdit"
         android:layout_width="88dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginBottom="16dp"
         android:text="@string/btnEdit"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline2"
-        app:layout_constraintVertical_bias="0.512" />
+        app:layout_constraintEnd_toEndOf="@+id/txtMLUserNotes"
+        app:layout_constraintTop_toTopOf="@+id/guideline6" />
 
     <Button
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
         android:text="@string/btnBack"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline2"
-        app:layout_constraintVertical_bias="0.512" />
+        app:layout_constraintStart_toStartOf="@+id/txtDeaths"
+        app:layout_constraintTop_toTopOf="@+id/guideline6" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.33" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="64dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

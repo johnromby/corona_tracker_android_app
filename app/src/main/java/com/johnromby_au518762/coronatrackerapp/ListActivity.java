@@ -125,6 +125,7 @@ public class ListActivity extends AppCompatActivity implements CountryAdapter.IC
         for (Country stats : countries) {
             if (stats.flagImgResId == selectedCountry.flagImgResId) {
                 countries.set(countries.indexOf(stats), selectedCountry);
+                adapter.notifyDataSetChanged();
                 return;
             }
         }

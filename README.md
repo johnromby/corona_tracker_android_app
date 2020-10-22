@@ -1,2 +1,2 @@
 # Corona Tracker Android App
-ITSMAP (E20) Assignment 1
+ITSMAP (E20) Assignment 1 & 2

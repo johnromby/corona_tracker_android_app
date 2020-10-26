@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Corona Tracker</string>
+    <string name="app_name">Corona Tracker 2A</string>
     <string name="btnExit">Luk</string>
     <string name="txtCountryName">Nations Navn</string>
     <string name="txtCases">Tilfælde:</string>

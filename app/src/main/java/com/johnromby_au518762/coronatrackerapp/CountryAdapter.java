@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 // Custom implementation of the RecyclerView.Adaptor class that handles a list of Country objects
 public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryViewHolder> {
@@ -32,7 +33,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
     private ICountryItemClickedListener listener;
 
     // Adapter data:
-    private ArrayList<Country> countryList;
+    private List<Country> countryList = new ArrayList<>();
 
     // Constructor:
     public CountryAdapter(ICountryItemClickedListener listener) {
@@ -40,7 +41,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
     }
 
     // Method for updating the country list, this causes the Adapter/RecyclerView to update:
-    public void updateCountryList(ArrayList<Country> countries) {
+    public void updateCountryList(List<Country> countries) {
         countryList = countries;
         notifyDataSetChanged();
     }
@@ -50,7 +51,8 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
     @NonNull
     @Override
     public CountryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.list_item, parent, false);
         return new CountryViewHolder(v, listener);
     }
 
@@ -63,10 +65,10 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
         Log.d(TAG, "Selected Country is: " + selectedCountry);
 
         // Binding txtViews etc. with the data from the selected country:
-        holder.imgFlag.setImageResource(selectedCountry.flagImgResId);
-        holder.txtCountry.setText(selectedCountry.countryName);
-        holder.txtCasesDeaths.setText(selectedCountry.numInfected + " / " + selectedCountry.numDeath);
-        holder.txtRating.setText("" + selectedCountry.userRating);
+        holder.imgFlag.setImageResource(selectedCountry.getFlagImgResId());
+        holder.txtCountry.setText(selectedCountry.getCountryName());
+        holder.txtCasesDeaths.setText(selectedCountry.getCasesSlashDeaths());
+        holder.txtRating.setText(selectedCountry.getUserRatingAsString());
     }
 
     @Override

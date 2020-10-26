@@ -1,16 +1,21 @@
 package com.johnromby_au518762.coronatrackerapp;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-public class Country implements Parcelable {
-    public String countryName;
-    public String countryCode;
-    public int flagImgResId;
-    public int numInfected;
-    public int numDeath;
-    public double userRating;
-    public String userNote;
+@Entity(tableName = "country_table")
+public class Country {
+
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
+    private String countryName;
+    private String countryCode;
+    private int flagImgResId;
+    private int numInfected;
+    private int numDeath;
+    private double userRating;
+    private String userNote;
 
     public Country(String countryName, String countryCode, int flagImgResId, int numInfected, int numDeath, double userRating, String userNote) {
         this.countryName = countryName;
@@ -22,33 +27,17 @@ public class Country implements Parcelable {
         this.userNote = userNote;
     }
 
-    protected Country(Parcel in) {
-        countryName = in.readString();
-        countryCode = in.readString();
-        flagImgResId = in.readInt();
-        numInfected = in.readInt();
-        numDeath = in.readInt();
-        userRating = in.readDouble();
-        userNote = in.readString();
+    // GETTERS & SETTERS:
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public static final Creator<Country> CREATOR = new Creator<Country>() {
-        @Override
-        public Country createFromParcel(Parcel in) {
-            return new Country(in);
-        }
-
-        @Override
-        public Country[] newArray(int size) {
-            return new Country[size];
-        }
-    };
-
-    // Not using these atm, but should probably do that.
     public String getCountryName() {
         return countryName;
     }
-
     public void setCountryName(String countryName) {
         this.countryName = countryName;
     }
@@ -56,7 +45,6 @@ public class Country implements Parcelable {
     public String getCountryCode() {
         return countryCode;
     }
-
     public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
     }
@@ -64,7 +52,6 @@ public class Country implements Parcelable {
     public int getFlagImgResId() {
         return flagImgResId;
     }
-
     public void setFlagImgResId(int flagImgResId) {
         this.flagImgResId = flagImgResId;
     }
@@ -72,7 +59,9 @@ public class Country implements Parcelable {
     public int getNumInfected() {
         return numInfected;
     }
-
+    public String getNumInfectedAsString() {
+        return String.valueOf(numInfected);
+    }
     public void setNumInfected(int numInfected) {
         this.numInfected = numInfected;
     }
@@ -80,7 +69,9 @@ public class Country implements Parcelable {
     public int getNumDeath() {
         return numDeath;
     }
-
+    public String getNumDeathAsString() {
+        return String.valueOf(numDeath);
+    }
     public void setNumDeath(int numDeath) {
         this.numDeath = numDeath;
     }
@@ -88,7 +79,9 @@ public class Country implements Parcelable {
     public double getUserRating() {
         return userRating;
     }
-
+    public String getUserRatingAsString() {
+        return Double.toString(userRating);
+    }
     public void setUserRating(double userRating) {
         this.userRating = userRating;
     }
@@ -96,37 +89,11 @@ public class Country implements Parcelable {
     public String getUserNote() {
         return userNote;
     }
-
     public void setUserNote(String userNote) {
         this.userNote = userNote;
     }
 
-    @Override
-    public String toString() {
-        return "Country{" +
-                "countryName='" + countryName + '\'' +
-                ", countryCode='" + countryCode + '\'' +
-                ", flagImgResId=" + flagImgResId +
-                ", numInfected=" + numInfected +
-                ", numDeath=" + numDeath +
-                ", userRating=" + userRating +
-                ", userNote='" + userNote + '\'' +
-                '}';
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(countryName);
-        dest.writeString(countryCode);
-        dest.writeInt(flagImgResId);
-        dest.writeInt(numInfected);
-        dest.writeInt(numDeath);
-        dest.writeDouble(userRating);
-        dest.writeString(userNote);
+    public String getCasesSlashDeaths() {
+        return getNumInfectedAsString() + " / " + getNumDeathAsString();
     }
 }

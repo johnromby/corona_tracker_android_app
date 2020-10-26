@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Corona Tracker</string>
+    <string name="app_name">Corona Tracker 2A</string>
     <string name="btnExit">Exit</string>
     <string name="txtCountryName">Country Name</string>
     <string name="txtCases">Cases:</string>

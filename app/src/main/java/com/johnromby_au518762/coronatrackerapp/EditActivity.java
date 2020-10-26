@@ -78,24 +78,24 @@ public class EditActivity extends AppCompatActivity {
     }
 
     private void goBackToDetailsActivity() {
-        selectedCountry.userRating = Double.parseDouble(txtUserRatingNum.getText().toString());
-        selectedCountry.userNote = txtMLUserNotes.getText().toString();
+/*        selectedCountry.setUserRating(Double.parseDouble(txtUserRatingNum.getText().toString()));
+        selectedCountry.setUserNote(txtMLUserNotes.getText().toString());
 
         Intent resultIntent = new Intent();
         resultIntent.putExtra(Constants.SELECTED_COUNTRY, selectedCountry);
-        setResult(RESULT_OK, resultIntent);
+        setResult(RESULT_OK, resultIntent);*/
         finish();
     }
 
     private void updateView() {
-        imgFlag.setImageResource(selectedCountry.flagImgResId);
-        txtCountryName.setText(selectedCountry.countryName);
-        txtUserRatingNum.setText(String.valueOf(selectedCountry.userRating));
-        txtMLUserNotes.setText(selectedCountry.userNote);
+        imgFlag.setImageResource(selectedCountry.getFlagImgResId());
+        txtCountryName.setText(selectedCountry.getCountryName());
+        txtUserRatingNum.setText(selectedCountry.getUserRatingAsString());
+        txtMLUserNotes.setText(selectedCountry.getUserNote());
 
-        seekBarUserRating.setProgress((int) (selectedCountry.userRating * 10));
+        seekBarUserRating.setProgress((int) (selectedCountry.getUserRating() * 10));
 
         // Activity title
-        setTitle(getResources().getText(R.string.editActivityTitle) + ": " + selectedCountry.countryName);
+        setTitle(getResources().getText(R.string.editActivityTitle) + ": " + selectedCountry.getCountryName());
     }
 }

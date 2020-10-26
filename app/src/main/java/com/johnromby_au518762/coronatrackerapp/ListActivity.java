@@ -6,27 +6,22 @@
 
 package com.johnromby_au518762.coronatrackerapp;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringDef;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
+import java.util.List;
 
 public class ListActivity extends AppCompatActivity implements CountryAdapter.ICountryItemClickedListener {
+    // ViewModel
+    private ListViewModel listViewModel;
 
     // For debugging
     private static final String TAG = "ListActivity";
@@ -35,9 +30,6 @@ public class ListActivity extends AppCompatActivity implements CountryAdapter.IC
     private RecyclerView rcvList;
     private CountryAdapter adapter;
     private Button btnExit;
-
-    // Data
-    private ArrayList<Country> countries;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,13 +45,14 @@ public class ListActivity extends AppCompatActivity implements CountryAdapter.IC
         rcvList.setLayoutManager(new LinearLayoutManager(this));
         rcvList.setAdapter(adapter);
 
-        // Creating data and updating the Adapter/RecycleView
-        if (savedInstanceState != null) {
-            countries = savedInstanceState.getParcelableArrayList(Constants.COUNTRIES_ARRAY);
-        } else {
-            createData();
-        }
-        adapter.updateCountryList(countries);
+        // Setting up ViewModel
+        listViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(ListViewModel.class);
+        listViewModel.getAllCountries().observe(this, new Observer<List<Country>>() {
+            @Override
+            public void onChanged(List<Country> countries) {
+                adapter.updateCountryList(countries);
+            }
+        });
 
         // Button(s) handle
         btnExit = findViewById(R.id.btnExit);
@@ -71,88 +64,11 @@ public class ListActivity extends AppCompatActivity implements CountryAdapter.IC
         });
     }
 
-    // Creating the list of Country objects
-    private void createData() {
-
-        countries = new ArrayList<>();
-
-        // Based on YouTube video: https://www.youtube.com/watch?v=i-TqNzUryn8
-        // TODO: Make a class for this CSV reader, so it can be used in other situations ;)
-        InputStream is = getResources().openRawResource(R.raw.corona_stats);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-
-        String line = "";
-
-        try {
-            while ( (line = reader.readLine()) != null ) {
-
-                // Split data by ';'
-                String[] tokens = line.split(";");
-
-                // Read data
-                Country sample = new Country(
-                        tokens[0],
-                        tokens[1],
-                        getResources().getIdentifier(tokens[1].toLowerCase(), "drawable", getApplication().getPackageName()),
-                        Integer.parseInt(tokens[2]),
-                        Integer.parseInt(tokens[3]),
-                        0.0,
-                        ""
-                );
-
-                // Adding data to array list
-                countries.add(sample);
-                
-                // Logging the sample data that was just created:
-                Log.d(TAG, "Just created data: " + sample);
-            }
-        } catch (IOException e) {
-                Log.wtf(TAG, "Error reading data file" + line, e);
-                e.printStackTrace();
-        }
-    }
-
     // Callback when a country item is clicked in the list
     @Override
     public void onCountryClicked(int index) {
-        openDetailsActivity(countries.get(index));
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == Constants.REQUEST_CODE_DETAILS) {
-            if (resultCode == RESULT_OK) {
-                Country selectedCountry = data.getParcelableExtra(Constants.SELECTED_COUNTRY);
-                updateArray(selectedCountry);
-            }
-        }
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putParcelableArrayList(Constants.COUNTRIES_ARRAY, countries);
-    }
-
-    private void updateArray(Country selectedCountry) {
-        for (Country stats : countries) {
-            if (stats.flagImgResId == selectedCountry.flagImgResId) {
-                countries.set(countries.indexOf(stats), selectedCountry);
-                adapter.notifyDataSetChanged();
-                return;
-            }
-        }
-    }
-
-    private void openDetailsActivity(Country country) {
-        Intent intent = new Intent(this, DetailsActivity.class);
-        intent.putExtra(Constants.SELECTED_COUNTRY, country);
-
-        // Using startActivityForResult() and not just startActivity() since we are expecting something back.
-        // onActivityResult() will handle the callback data.
-        startActivityForResult(intent, Constants.REQUEST_CODE_DETAILS);
+        Toast.makeText(this, "Country with index: " + index + " clicked!", Toast.LENGTH_SHORT).show();
+        // TODO: Remove Toast and open DetailsActivity here.
+//        openDetailsActivity(countries.get(index));
     }
 }

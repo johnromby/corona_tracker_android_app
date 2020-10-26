@@ -84,35 +84,37 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
-    @Override
+/*    @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         outState.putParcelable(Constants.SELECTED_COUNTRY, selectedCountry);
-    }
+    }*/
 
     private void goBackToListActivity() {
-        Intent resultIntent = new Intent();
+        /*Intent resultIntent = new Intent();
         resultIntent.putExtra(Constants.SELECTED_COUNTRY, selectedCountry);
-        setResult(RESULT_OK, resultIntent);
+        setResult(RESULT_OK, resultIntent);*/
         finish();
     }
 
     private void openEditActivity() {
-        Intent intent = new Intent(this, EditActivity.class);
+        Toast.makeText(this, "Opening Edit Activity...", Toast.LENGTH_SHORT).show();
+
+        /*Intent intent = new Intent(this, EditActivity.class);
         intent.putExtra(Constants.SELECTED_COUNTRY, selectedCountry);
-        startActivityForResult(intent, Constants.REQUEST_CODE_EDIT);
+        startActivityForResult(intent, Constants.REQUEST_CODE_EDIT);*/
     }
 
     private void updateView() {
-        imgFlag.setImageResource(selectedCountry.flagImgResId);
-        txtCountryName.setText(selectedCountry.countryName);
-        txtCasesNum.setText(String.valueOf(selectedCountry.numInfected));
-        txtDeathsNum.setText(String.valueOf(selectedCountry.numDeath));
-        txtUserRatingNum.setText(String.valueOf(selectedCountry.userRating));
-        txtMLUserNotes.setText(selectedCountry.userNote);
+        imgFlag.setImageResource(selectedCountry.getFlagImgResId());
+        txtCountryName.setText(selectedCountry.getCountryName());
+        txtCasesNum.setText(selectedCountry.getNumInfectedAsString());
+        txtDeathsNum.setText(selectedCountry.getNumDeathAsString());
+        txtUserRatingNum.setText(selectedCountry.getUserRatingAsString());
+        txtMLUserNotes.setText(selectedCountry.getUserNote());
 
         // Activity title
-        setTitle(getResources().getText(R.string.detailsActivityTitle) + ": " + selectedCountry.countryName);
+        setTitle(getResources().getText(R.string.detailsActivityTitle) + ": " + selectedCountry.getCountryName());
     }
 }

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.List;
@@ -29,6 +30,8 @@ public class ListActivity extends AppCompatActivity implements CountryAdapter.IC
     // Widgets
     private RecyclerView rcvList;
     private CountryAdapter adapter;
+    private EditText editTextSearchField;
+    private Button btnAdd;
     private Button btnExit;
 
     @Override
@@ -54,7 +57,21 @@ public class ListActivity extends AppCompatActivity implements CountryAdapter.IC
             }
         });
 
+        // Country search field
+        editTextSearchField = findViewById(R.id.editTextSearchField);
+
         // Button(s) handle
+        btnAdd = findViewById(R.id.btnAdd);
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 1. Check that searched for country is valid.
+                // 2. Check country is not already in the list.
+                // 3. Add new country to db.
+                Toast.makeText(ListActivity.this, "New country added: " + editTextSearchField.getText(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
         btnExit = findViewById(R.id.btnExit);
         btnExit.setOnClickListener(new View.OnClickListener() {
             @Override

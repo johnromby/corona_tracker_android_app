@@ -17,4 +17,6 @@
     <string name="detailsActivityTitle">Details</string>
     <string name="editActivityTitle">Edit</string>
     <string name="cancelToast">Canceled by user</string>
+    <string name="btnAdd">Add</string>
+    <string name="txtSearchFieldHint">Search for country here…</string>
 </resources>

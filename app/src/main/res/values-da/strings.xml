@@ -18,4 +18,6 @@
     <string name="detailsActivityTitle">Detaljer</string>
     <string name="editActivityTitle">Rediger</string>
     <string name="cancelToast">Annulleret af brugeren</string>
+    <string name="btnAdd">Tilføj</string>
+    <string name="txtSearchFieldHint">Søg efter nation her…</string>
 </resources>

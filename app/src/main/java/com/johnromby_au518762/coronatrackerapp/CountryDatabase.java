@@ -28,8 +28,8 @@ public abstract class CountryDatabase extends RoomDatabase {
     // Get our singleton database
     // Note: Synchronized means only one thread can access this at a time, which prevents multiple instances of the database
     public static synchronized CountryDatabase getInstance(Context context) {
-        CsvUtil csvUtil = new CsvUtil(context);
-        countries = csvUtil.GetData();
+        CsvUtil csvUtil = new CsvUtil(context, R.raw.corona_stats);
+        countries = csvUtil.GetCountriesFromCsvFile();
 
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),

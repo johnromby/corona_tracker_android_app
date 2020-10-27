@@ -11,23 +11,27 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO make this utility class generic.
 public final class CsvUtil {
     private Context context;
+    private int resourceIdOfCsvFile;
+    private final String delimiter = ";";
 
     // Debug Tag
     private static final String TAG = "CsvUtil";
 
-    public CsvUtil(Context context) {
+    public CsvUtil(Context context, int resourceIdOfCsvFile) {
         this.context = context;
+        this.resourceIdOfCsvFile = resourceIdOfCsvFile;
     }
 
-    public List<Country> GetData() {
+    public List<Country> GetCountriesFromCsvFile() {
         // Inspired on the YouTube video: https://www.youtube.com/watch?v=i-TqNzUryn8
 
         List<Country> countries = new ArrayList<>();
 
         // Creating the list of Country objects:
-        InputStream is = context.getResources().openRawResource(R.raw.corona_stats);
+        InputStream is = context.getResources().openRawResource(resourceIdOfCsvFile);
         BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
 
         String line = "";
@@ -36,10 +40,10 @@ public final class CsvUtil {
             while ( (line = reader.readLine()) != null ) {
 
                 // Split data by ';'
-                String[] tokens = line.split(";");
+                String[] tokens = line.split(delimiter);
 
                 // Read data
-                Country sample = new Country(
+                Country country = new Country(
                         tokens[0],
                         tokens[1],
                         context.getResources().getIdentifier(tokens[1].toLowerCase(), "drawable", context.getPackageName()),
@@ -50,10 +54,10 @@ public final class CsvUtil {
                 );
 
                 // Adding data to array list
-                countries.add(sample);
+                countries.add(country);
 
-                // Logging the sample data that was just created:
-                Log.d(TAG, "Just created data: " + sample);
+                // Logging the country that was just created:
+                Log.d(TAG, "Just created country: " + country);
             }
         } catch (IOException e) {
             Log.wtf(TAG, "Error reading data file" + line, e);

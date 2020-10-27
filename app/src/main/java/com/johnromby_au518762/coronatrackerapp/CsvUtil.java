@@ -46,7 +46,6 @@ public final class CsvUtil {
                 Country country = new Country(
                         tokens[0],
                         tokens[1],
-                        context.getResources().getIdentifier(tokens[1].toLowerCase(), "drawable", context.getPackageName()),
                         Integer.parseInt(tokens[2]),
                         Integer.parseInt(tokens[3]),
                         0.0,
@@ -57,7 +56,7 @@ public final class CsvUtil {
                 countries.add(country);
 
                 // Logging the country that was just created:
-                Log.d(TAG, "Just created country: " + country);
+                Log.d(TAG, "Just created country: " + country.getCountryName());
             }
         } catch (IOException e) {
             Log.wtf(TAG, "Error reading data file" + line, e);

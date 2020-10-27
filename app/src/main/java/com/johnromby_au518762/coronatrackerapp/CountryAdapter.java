@@ -16,6 +16,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,10 +64,14 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
 
         // Current position taken from which country the user clicked:
         Country selectedCountry = countryList.get(position);
-        Log.d(TAG, "Selected Country is: " + selectedCountry);
+        Log.d(TAG, "Selected Country is: " + selectedCountry.getCountryName());
 
         // Binding txtViews etc. with the data from the selected country:
-        holder.imgFlag.setImageResource(selectedCountry.getFlagImgResId());
+        // Inspired by E20-ITSMAP L6 Demo video: "Rick and Morty Gallery with Volley and Glide"
+        Glide.with(holder.imgFlag.getContext())
+                .load("https://www.countryflags.io/" + selectedCountry.getCountryCode() + "/flat/64.png")
+                .placeholder(R.drawable.no_image_placeholder)
+                .into(holder.imgFlag);
         holder.txtCountry.setText(selectedCountry.getCountryName());
         holder.txtCasesDeaths.setText(selectedCountry.getCasesSlashDeaths());
         holder.txtRating.setText(selectedCountry.getUserRatingAsString());

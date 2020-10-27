@@ -107,7 +107,7 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private void updateView() {
-        imgFlag.setImageResource(selectedCountry.getFlagImgResId());
+//        imgFlag.setImageResource(selectedCountry.getFlagImgResId());
         txtCountryName.setText(selectedCountry.getCountryName());
         txtCasesNum.setText(selectedCountry.getNumInfectedAsString());
         txtDeathsNum.setText(selectedCountry.getNumDeathAsString());

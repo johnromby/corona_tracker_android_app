@@ -11,16 +11,14 @@ public class Country {
 
     private String countryName;
     private String countryCode;
-    private int flagImgResId;
     private int numInfected;
     private int numDeath;
     private double userRating;
     private String userNote;
 
-    public Country(String countryName, String countryCode, int flagImgResId, int numInfected, int numDeath, double userRating, String userNote) {
+    public Country(String countryName, String countryCode, int numInfected, int numDeath, double userRating, String userNote) {
         this.countryName = countryName;
         this.countryCode = countryCode;
-        this.flagImgResId = flagImgResId;
         this.numInfected = numInfected;
         this.numDeath = numDeath;
         this.userRating = userRating;
@@ -47,13 +45,6 @@ public class Country {
     }
     public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
-    }
-
-    public int getFlagImgResId() {
-        return flagImgResId;
-    }
-    public void setFlagImgResId(int flagImgResId) {
-        this.flagImgResId = flagImgResId;
     }
 
     public int getNumInfected() {

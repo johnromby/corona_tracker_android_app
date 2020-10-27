@@ -88,7 +88,7 @@ public class EditActivity extends AppCompatActivity {
     }
 
     private void updateView() {
-        imgFlag.setImageResource(selectedCountry.getFlagImgResId());
+//        imgFlag.setImageResource(selectedCountry.getFlagImgResId());
         txtCountryName.setText(selectedCountry.getCountryName());
         txtUserRatingNum.setText(selectedCountry.getUserRatingAsString());
         txtMLUserNotes.setText(selectedCountry.getUserNote());

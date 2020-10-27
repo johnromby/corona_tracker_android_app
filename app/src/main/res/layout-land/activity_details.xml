@@ -17,7 +17,7 @@
         android:contentDescription="@string/imgCountryFlagDescription"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/dk" />
+        app:srcCompat="@drawable/no_image_placeholder" />
 
     <TextView
         android:id="@+id/txtCountryName"

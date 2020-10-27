@@ -62,7 +62,7 @@ public abstract class CountryDatabase extends RoomDatabase {
             // Inserting the list of Country objects for a fresh database.
             for (Country country : countries) {
                 countryDao.insert(country);
-                Log.d(TAG, "Current country added to the database: " + country);
+                Log.d(TAG, "Current country added to the database: " + country.getCountryName());
             }
             return null;
         }

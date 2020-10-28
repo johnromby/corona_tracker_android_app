@@ -6,8 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ListViewModel extends AndroidViewModel {
@@ -20,8 +18,8 @@ public class ListViewModel extends AndroidViewModel {
         allCountries = repository.getAllCountries();
     }
 
-    public void insert(Country country) {
-        repository.insert(country);
+    public void insert(String countryName) {
+        repository.sendRequest(countryName);
     }
 
     public LiveData<List<Country>> getAllCountries() {

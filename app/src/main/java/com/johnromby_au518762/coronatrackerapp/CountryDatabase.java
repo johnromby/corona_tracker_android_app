@@ -19,7 +19,7 @@ public abstract class CountryDatabase extends RoomDatabase {
     // Singleton
     private static CountryDatabase instance;
     // Debug Tag
-    private static final String TAG = "RoomDatabase";
+    private static final String TAG = "CountryDatabase";
     // Used to access our Dao
     public abstract CountryDao countryDao();
     // List to hold countries

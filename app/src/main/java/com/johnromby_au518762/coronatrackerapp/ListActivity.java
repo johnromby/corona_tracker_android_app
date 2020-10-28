@@ -45,6 +45,7 @@ public class ListActivity extends AppCompatActivity implements CountryAdapter.IC
         // Recyclerview Set-up (Adapter and Layout Manager)
         adapter = new CountryAdapter(this);
         rcvList = findViewById(R.id.rcvCountries);
+        rcvList.setHasFixedSize(true); // This increases performance for RecyclerViews that does not change their size.
         rcvList.setLayoutManager(new LinearLayoutManager(this));
         rcvList.setAdapter(adapter);
 
@@ -65,10 +66,10 @@ public class ListActivity extends AppCompatActivity implements CountryAdapter.IC
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 1. Check that searched for country is valid.
-                // 2. Check country is not already in the list.
-                // 3. Add new country to db.
-                Toast.makeText(ListActivity.this, "New country added: " + editTextSearchField.getText(), Toast.LENGTH_SHORT).show();
+                listViewModel.insert(editTextSearchField.getText().toString());
+                editTextSearchField.setText("");
+                // TODO Make a Toast or notification that shows if the country was added successfully or not.
+//                Toast.makeText(ListActivity.this, "New country added: " + editTextSearchField.getText(), Toast.LENGTH_SHORT).show();
             }
         });
 

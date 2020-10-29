@@ -16,22 +16,21 @@ import java.util.List;
 
 @Database(entities = {Country.class}, version = 1)
 public abstract class CountryDatabase extends RoomDatabase {
-    // Singleton
-    private static CountryDatabase instance;
     // Debug Tag
     private static final String TAG = "CountryDatabase";
+    // Singleton
+    private static CountryDatabase instance;
     // Used to access our Dao
     public abstract CountryDao countryDao();
-    // List to hold countries
+    // List to hold countries from csv file
     private static List<Country> countries;
 
     // Get our singleton database
     // Note: Synchronized means only one thread can access this at a time, which prevents multiple instances of the database
     public static synchronized CountryDatabase getInstance(Context context) {
-        CsvUtil csvUtil = new CsvUtil(context, R.raw.corona_stats);
-        countries = csvUtil.GetCountriesFromCsvFile();
-
         if (instance == null) {
+            CsvUtil csvUtil = new CsvUtil(context, R.raw.corona_stats);
+            countries = csvUtil.GetCountriesFromCsvFile();
             instance = Room.databaseBuilder(context.getApplicationContext(),
                     CountryDatabase.class, "country_database")
                     .fallbackToDestructiveMigration()

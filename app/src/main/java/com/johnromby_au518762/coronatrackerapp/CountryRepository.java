@@ -28,22 +28,20 @@ public class CountryRepository {
     private static final String TAG = "CountryRepository";
 
     private CountryDao countryDao;
-    private LiveData<List<Country>> allCountries;
-
     private RequestQueue requestQueue;
+    private LiveData<List<Country>> allCountries;
     private ArrayList<CountryLive> countriesLive;
 
     public CountryRepository(Application application) {
-        requestQueue = Volley.newRequestQueue(application);
-        countriesLive = new ArrayList<>();
-
         CountryDatabase database = CountryDatabase.getInstance(application);
         countryDao = database.countryDao();
         allCountries = countryDao.getAllCountries();
+
+        requestQueue = Volley.newRequestQueue(application);
+        countriesLive = new ArrayList<>();
     }
 
-    //region Repository API methods. This is the abstraction layer between the ViewModel and the Room Database.
-
+    // TODO: Should probably move all the Volley stuff to it's own class.
     // Inspiration: https://www.youtube.com/watch?v=bRvLg27EWp0&list=PLrnPJCHvNZuBCiCxN8JPFI57Zhr5SusRL&index=4
     // And by E20-ITSMAP L6 Demo video: "Rick and Morty Gallery with Volley and Glide"
     public void sendRequest(String countryName) {
@@ -102,6 +100,7 @@ public class CountryRepository {
         }
     }
 
+    //region Repository API methods. This is the abstraction layer between the ViewModel and the Room Database.
     public void insert(Country country) {
         new InsertCountryAsyncTask(countryDao).execute(country);
     }
@@ -121,9 +120,8 @@ public class CountryRepository {
     public LiveData<List<Country>> getAllCountries() {
         return allCountries;
     }
-    //endregion
 
-    // TODO: Upgrade to use Executor instead, AsyncTask is deprecated!
+    // TODO: Should probably upgrade to use Executor instead, AsyncTask is deprecated!
     private static class InsertCountryAsyncTask extends AsyncTask<Country, Void, Void> {
         private CountryDao countryDao;
 
@@ -179,4 +177,5 @@ public class CountryRepository {
             return null;
         }
     }
+    //endregion
 }

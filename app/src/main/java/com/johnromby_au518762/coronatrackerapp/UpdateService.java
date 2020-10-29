@@ -45,7 +45,7 @@ public class UpdateService extends Service {
         Log.d(TAG, "onStartCommand: Service started");
 
         if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(SERVICE_CHANNEL, "Live Corona Data Service", NotificationManager.IMPORTANCE_LOW);
+            NotificationChannel channel = new NotificationChannel(SERVICE_CHANNEL, getString(R.string.NotificationChannelName), NotificationManager.IMPORTANCE_LOW);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(channel);
         }
@@ -60,10 +60,10 @@ public class UpdateService extends Service {
     private Notification getNewNotification() {
         Country c = repository.getSingleRandomCountry();
         return new NotificationCompat.Builder(this, SERVICE_CHANNEL)
-                .setContentTitle("Live Corona Data for " + c.getCountryName())
-                .setContentText("Cases: " + c.getNumInfectedAsString() + " / Deaths: " + c.getNumDeathAsString())
+                .setContentTitle(getString(R.string.NotificationCompatTitle) + c.getCountryName())
+                .setContentText(getString(R.string.txtCases) + c.getNumInfectedAsString() + " / " + getString(R.string.txtDeaths) + c.getNumDeathAsString())
                 .setSmallIcon(R.drawable.ic_new_corona_numbers)
-                .setTicker("Brought to you by: https://covid19api.com")
+                .setTicker(getString(R.string.NotificationCompatTicker) + " https://covid19api.com")
                 .build();
     }
 

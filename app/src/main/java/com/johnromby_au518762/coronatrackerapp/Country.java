@@ -3,6 +3,10 @@ package com.johnromby_au518762.coronatrackerapp;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
+
 @Entity(tableName = "country_table")
 public class Country {
 
@@ -51,7 +55,7 @@ public class Country {
         return numInfected;
     }
     public String getNumInfectedAsString() {
-        return String.valueOf(numInfected);
+        return DecimalFormatter(numInfected);
     }
     public void setNumInfected(int numInfected) {
         this.numInfected = numInfected;
@@ -61,7 +65,7 @@ public class Country {
         return numDeath;
     }
     public String getNumDeathAsString() {
-        return String.valueOf(numDeath);
+        return DecimalFormatter(numDeath);
     }
     public void setNumDeath(int numDeath) {
         this.numDeath = numDeath;
@@ -86,5 +90,13 @@ public class Country {
 
     public String getCasesSlashDeaths() {
         return getNumInfectedAsString() + " / " + getNumDeathAsString();
+    }
+
+    // https://docs.oracle.com/javase/tutorial/i18n/format/decimalFormat.html
+    private static String DecimalFormatter(int value) {
+        NumberFormat nf = NumberFormat.getNumberInstance(Locale.getDefault());
+        DecimalFormat df = (DecimalFormat)nf;
+        df.applyPattern("###,###");
+        return df.format(value);
     }
 }

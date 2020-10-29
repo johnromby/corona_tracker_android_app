@@ -1,4 +1,6 @@
-// Overall credit goes to Coding in Flow: https://codinginflow.com
+// Credit goes to Coding in Flow: https://codinginflow.com
+// Also inspired by (E20) ITSMAP "L7 - Fragments and Advanced UI" Tracker demo app.
+// Lastly Async processing with Executor was inspired by (E20) ITSMAP "L4 - Persistence" room demo app.
 
 package com.johnromby_au518762.coronatrackerapp;
 
@@ -19,6 +21,10 @@ import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import com.johnromby_au518762.coronatrackerapp.model.CountryLive;
 import com.johnromby_au518762.coronatrackerapp.model.Covid19ApiSummery;
@@ -26,22 +32,40 @@ import com.johnromby_au518762.coronatrackerapp.model.Covid19ApiSummery;
 public class CountryRepository {
     // For debugging
     private static final String TAG = "CountryRepository";
+    // Singleton
+    private static CountryRepository instance;
 
-    private CountryDao countryDao;
-    private RequestQueue requestQueue;
-    private LiveData<List<Country>> allCountries;
-    private ArrayList<CountryLive> countriesLive;
+    // This is to replace AsyncTask, which is deprecated
+    private static ExecutorService executor;
 
-    public CountryRepository(Application application) {
-        CountryDatabase database = CountryDatabase.getInstance(application);
-        countryDao = database.countryDao();
-        allCountries = countryDao.getAllCountries();
+    private static CountryDao countryDao;
+    private static LiveData<List<Country>> allCountries;
+    private static ArrayList<CountryLive> countriesLive;
+    private static RequestQueue requestQueue;
 
-        requestQueue = Volley.newRequestQueue(application);
-        countriesLive = new ArrayList<>();
+    public CountryRepository() {
     }
 
-    // TODO: Should probably move all the Volley stuff to it's own class.
+    // Get singleton repository
+    public static CountryRepository getInstance() {
+        if (instance == null) {
+            instance = new CountryRepository();
+            Log.d(TAG, "getInstance: Singleton CountryRepository created successfully.");
+
+            executor = Executors.newSingleThreadExecutor();
+
+            CountryDatabase database = CountryDatabase.getInstance((Application) App.getAppContext());
+            countryDao = database.countryDao();
+            allCountries = countryDao.getAllCountries();
+
+            requestQueue = Volley.newRequestQueue((Application) App.getAppContext());
+            countriesLive = new ArrayList<>();
+        }
+        return instance;
+    }
+
+    //region Volley (Need to move this to its own class)
+    // TODO: Should probably move all the Volley stuff to its own class.
     // Inspiration: https://www.youtube.com/watch?v=bRvLg27EWp0&list=PLrnPJCHvNZuBCiCxN8JPFI57Zhr5SusRL&index=4
     // And by E20-ITSMAP L6 Demo video: "Rick and Morty Gallery with Volley and Glide"
     public void sendRequest(String countryName) {
@@ -83,9 +107,9 @@ public class CountryRepository {
     }
 
     private CountryLive containsCountry(String countryName) {
-        for (CountryLive currentCountry: countriesLive) {
+        for (CountryLive currentCountry : countriesLive) {
             if (currentCountry.getCountry().toLowerCase().equals(countryName.toLowerCase()) ||
-                currentCountry.getCountryCode().toLowerCase().equals(countryName.toLowerCase())){
+                    currentCountry.getCountryCode().toLowerCase().equals(countryName.toLowerCase())) {
                 return currentCountry;
             }
         }
@@ -94,11 +118,12 @@ public class CountryRepository {
 
     private void parseJson(String json) {
         Gson gson = new GsonBuilder().create();
-        Covid19ApiSummery dailySummery =  gson.fromJson(json, Covid19ApiSummery.class);
-        if(dailySummery != null) {
+        Covid19ApiSummery dailySummery = gson.fromJson(json, Covid19ApiSummery.class);
+        if (dailySummery != null) {
             countriesLive.addAll(dailySummery.getCountries());
         }
     }
+    //endregion
 
     //region Repository API methods. This is the abstraction layer between the ViewModel and the Room Database.
     public void insert(Country country) {
@@ -109,12 +134,18 @@ public class CountryRepository {
         new UpdateCountryAsyncTask(countryDao).execute(country);
     }
 
+    // TODO: updateAllCountries() { }
+
     public void delete(Country country) {
         new DeleteCountryAsyncTask(countryDao).execute(country);
     }
 
     public void deleteAllCountries() {
-        new DeleteAllCountriesAsyncTask(countryDao).execute();
+        deleteAllCountriesAsync();
+    }
+
+    public Country getSingleRandomCountry() {
+        return getSingleRandomCountryAsync();
     }
 
     public LiveData<List<Country>> getAllCountries() {
@@ -164,18 +195,25 @@ public class CountryRepository {
         }
     }
 
-    private static class DeleteAllCountriesAsyncTask extends AsyncTask<Void, Void, Void> {
-        private CountryDao countryDao;
-
-        private DeleteAllCountriesAsyncTask(CountryDao countryDao) {
-            this.countryDao = countryDao;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
+    private void deleteAllCountriesAsync() {
+        executor.submit(() -> {
             countryDao.deleteAllCountries();
             return null;
+        });
+    }
+
+    private Country getSingleRandomCountryAsync() {
+        Future<Country> country = executor.submit(() -> countryDao.getSingleRandomCountry());
+
+        try {
+            return country.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+
+        return null;
     }
     //endregion
 }

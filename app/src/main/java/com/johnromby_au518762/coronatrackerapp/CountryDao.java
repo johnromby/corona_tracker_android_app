@@ -26,6 +26,10 @@ public interface CountryDao {
     @Query("DELETE FROM country_table")
     void deleteAllCountries();
 
+    // Inspired by: https://stackoverflow.com/questions/28249169/get-random-record-in-sqlite
+    @Query("SELECT * FROM country_table ORDER BY RANDOM() LIMIT 1")
+    Country getSingleRandomCountry();
+
     @Query("SELECT * FROM country_table ORDER BY countryName ASC ")
     LiveData<List<Country>> getAllCountries();
 }

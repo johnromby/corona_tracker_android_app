@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -21,11 +22,11 @@ import android.widget.Toast;
 import java.util.List;
 
 public class ListActivity extends AppCompatActivity implements CountryAdapter.ICountryItemClickedListener {
-    // ViewModel
-    private ListViewModel listViewModel;
-
     // For debugging
     private static final String TAG = "ListActivity";
+
+    // ViewModel
+    private ListViewModel listViewModel;
 
     // Widgets
     private RecyclerView rcvList;
@@ -33,6 +34,7 @@ public class ListActivity extends AppCompatActivity implements CountryAdapter.IC
     private EditText editTextSearchField;
     private Button btnAdd;
     private Button btnExit;
+    private Button btnDeleteAll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,18 @@ public class ListActivity extends AppCompatActivity implements CountryAdapter.IC
                 finish();
             }
         });
+
+        btnDeleteAll = findViewById(R.id.btnDeleteAll);
+        btnDeleteAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listViewModel.deleteAll();
+                Toast.makeText(ListActivity.this, "All data is now gone!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Starting ForegroundService (UpdateService)
+        startService(new Intent(this, UpdateService.class));
     }
 
     // Callback when a country item is clicked in the list

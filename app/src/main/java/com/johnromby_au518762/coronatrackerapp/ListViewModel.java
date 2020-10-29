@@ -9,12 +9,12 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 public class ListViewModel extends AndroidViewModel {
-    private CountryRepository repository;
-    private LiveData<List<Country>> allCountries;
+    private final CountryRepository repository;
+    private final LiveData<List<Country>> allCountries;
 
     public ListViewModel(@NonNull Application application) {
         super(application);
-        repository = new CountryRepository(application);
+        repository = CountryRepository.getInstance();
         allCountries = repository.getAllCountries();
     }
 
@@ -24,5 +24,9 @@ public class ListViewModel extends AndroidViewModel {
 
     public LiveData<List<Country>> getAllCountries() {
         return allCountries;
+    }
+
+    public void deleteAll() {
+        repository.deleteAllCountries();
     }
 }

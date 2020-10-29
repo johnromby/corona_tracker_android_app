@@ -25,7 +25,7 @@ public abstract class CountryDatabase extends RoomDatabase {
     // List to hold countries from csv file
     private static List<Country> countries;
 
-    // Get our singleton database
+    // Get singleton database
     // Note: Synchronized means only one thread can access this at a time, which prevents multiple instances of the database
     public static synchronized CountryDatabase getInstance(Context context) {
         if (instance == null) {

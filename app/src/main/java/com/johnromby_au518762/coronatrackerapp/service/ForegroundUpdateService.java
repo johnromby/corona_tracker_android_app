@@ -1,6 +1,6 @@
 // Credit: (E20) ITSMAP "L5 - Services and Asynch Processing" DemoService project.
 
-package com.johnromby_au518762.coronatrackerapp;
+package com.johnromby_au518762.coronatrackerapp.service;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -14,12 +14,16 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import com.johnromby_au518762.coronatrackerapp.model.CountryRepository;
+import com.johnromby_au518762.coronatrackerapp.R;
+import com.johnromby_au518762.coronatrackerapp.model.Country;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class UpdateService extends Service {
+public class ForegroundUpdateService extends Service {
     // Debugging Tag
-    private static final String TAG = "UpdateService";
+    private static final String TAG = "ForegroundUpdateService";
 
     public static final String SERVICE_CHANNEL = "serviceChannel";
     public static final int NOTIFICATION_ID = 42;
@@ -28,9 +32,9 @@ public class UpdateService extends Service {
     private ExecutorService execService;
     private boolean started = false;
 
-    private CountryRepository repository;
+    private final CountryRepository repository;
 
-    public UpdateService() {
+    public ForegroundUpdateService() {
         repository = CountryRepository.getInstance();
     }
 
@@ -58,10 +62,18 @@ public class UpdateService extends Service {
     }
 
     private Notification getNewNotification() {
+        // TODO (CRASH): App crashes if no data is to be found in cache or the database.
+        //  I think this happens since there is no database or cached objects.
+        //  One solution would probably be to make this wait a bit before executing.
         Country c = repository.getSingleRandomCountry();
+
+        // TODO (Improvement): Should probably find a better solution, since this kills the service!
+        // Recursive call if no countries are available.
+        if (c == null) getNewNotification();
+
         return new NotificationCompat.Builder(this, SERVICE_CHANNEL)
-                .setContentTitle(getString(R.string.NotificationCompatTitle) + c.getCountryName())
-                .setContentText(getString(R.string.txtCases) + c.getNumInfectedAsString() + " / " + getString(R.string.txtDeaths) + c.getNumDeathAsString())
+                .setContentTitle(getString(R.string.NotificationCompatTitle) + " " + c.getCountryName())
+                .setContentText(getString(R.string.txtCases) + " " + c.getNumInfectedAsString() + " / " + getString(R.string.txtDeaths) + " " + c.getNumDeathAsString())
                 .setSmallIcon(R.drawable.ic_new_corona_numbers)
                 .setTicker(getString(R.string.NotificationCompatTicker) + " https://covid19api.com")
                 .build();

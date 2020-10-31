@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/activityBackgroundColor"
-    tools:context=".ListActivity">
+    tools:context=".view.ListActivity">
 
 <!--    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
@@ -31,9 +31,9 @@
         android:id="@+id/btnDeleteAll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="NUKE EM"
+        android:text="Nuke 'em, Rico!"
         android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/btnExit"
         app:layout_constraintEnd_toEndOf="@+id/btnAdd"
         app:layout_constraintTop_toBottomOf="@+id/btnAdd" />
 
@@ -65,12 +65,10 @@
         android:id="@+id/btnExit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/btnExit"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/btnDeleteAll"
-        app:layout_constraintTop_toBottomOf="@+id/btnDeleteAll" />
+        app:layout_constraintEnd_toEndOf="@+id/btnDeleteAll" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline5"

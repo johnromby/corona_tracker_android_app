@@ -1,5 +1,5 @@
 
-package com.johnromby_au518762.coronatrackerapp.model;
+package com.johnromby_au518762.coronatrackerapp.model.gson;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

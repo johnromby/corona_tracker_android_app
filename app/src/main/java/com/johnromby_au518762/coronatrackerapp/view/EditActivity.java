@@ -1,8 +1,8 @@
-package com.johnromby_au518762.coronatrackerapp;
+package com.johnromby_au518762.coronatrackerapp.view;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,10 +10,18 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-public class EditActivity extends AppCompatActivity {
+import com.bumptech.glide.Glide;
+import com.johnromby_au518762.coronatrackerapp.R;
+import com.johnromby_au518762.coronatrackerapp.model.Country;
+import com.johnromby_au518762.coronatrackerapp.viewmodel.DetailsViewModel;
+import com.johnromby_au518762.coronatrackerapp.viewmodel.EditViewModel;
 
+public class EditActivity extends AppCompatActivity {
     // For debugging
     private static final String TAG = "EditActivity";
+
+    // ViewModel
+    private EditViewModel editViewModel;
 
     // Widgets
     private ImageView imgFlag;
@@ -28,13 +36,27 @@ public class EditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
 
+        // Setting up ViewModel
+        editViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(EditViewModel.class);
+
+        // Getting current selected Country
+        selectedCountry = editViewModel.getCurrentCountry();
+
+        // Binding Widgets
+        bindWidgets();
+
+        // Updating view/activity
+        updateView();
+    }
+
+    private void bindWidgets() {
         // Binding to widgets
         imgFlag = findViewById(R.id.imgFlag);
         txtCountryName = findViewById(R.id.txtCountryName);
         txtUserRatingNum = findViewById(R.id.txtUserRatingNum);
         txtMLUserNotes = findViewById(R.id.txtMLUserNotes);
 
-        // SeekBar
+        // Binding to SeekBar
         seekBarUserRating = findViewById(R.id.seekBarUserRating);
         seekBarUserRating.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -44,58 +66,42 @@ public class EditActivity extends AppCompatActivity {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
             }
         });
 
-        // Buttons
+        // Binding to Buttons
         Button btnCancel = findViewById(R.id.btnCancel);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        btnCancel.setOnClickListener(v -> finish());
         Button btnOk = findViewById(R.id.btnOk);
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goBackToDetailsActivity();
-            }
-        });
-
-        // Getting intent
-        Intent intent = getIntent();
-        // Using Parcelable is based on YouTube video: https://www.youtube.com/watch?v=WBbsvqSu0is
-        selectedCountry = intent.getParcelableExtra(Constants.SELECTED_COUNTRY);
-        // Calling method for updating the view with data from the passed object
-        updateView();
+        btnOk.setOnClickListener(v -> goBackToDetailsActivity());
     }
 
     private void goBackToDetailsActivity() {
-/*        selectedCountry.setUserRating(Double.parseDouble(txtUserRatingNum.getText().toString()));
+        selectedCountry.setUserRating(Double.parseDouble(txtUserRatingNum.getText().toString()));
         selectedCountry.setUserNote(txtMLUserNotes.getText().toString());
-
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra(Constants.SELECTED_COUNTRY, selectedCountry);
-        setResult(RESULT_OK, resultIntent);*/
         finish();
     }
 
     private void updateView() {
-//        imgFlag.setImageResource(selectedCountry.getFlagImgResId());
+        // Activity title
+        setTitle(getResources().getText(R.string.editActivityTitle) + ": " + selectedCountry.getCountryName());
+
+        // TODO (DRY): Maybe move this to a utility class!?
+        // Getting flag from online api
+        // Credit: https://github.com/bumptech/glide
+        Glide.with(this)
+                .load("https://www.countryflags.io/" + selectedCountry.getCountryCode() + "/flat/64.png")
+                .placeholder(R.drawable.no_image_placeholder)
+                .into(imgFlag);
+
         txtCountryName.setText(selectedCountry.getCountryName());
         txtUserRatingNum.setText(selectedCountry.getUserRatingAsString());
         txtMLUserNotes.setText(selectedCountry.getUserNote());
 
         seekBarUserRating.setProgress((int) (selectedCountry.getUserRating() * 10));
-
-        // Activity title
-        setTitle(getResources().getText(R.string.editActivityTitle) + ": " + selectedCountry.getCountryName());
     }
 }

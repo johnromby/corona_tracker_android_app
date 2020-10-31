@@ -1,6 +1,6 @@
 // Credit: https://codinginflow.com/tutorials/android/room-viewmodel-livedata-recyclerview-mvvm/part-4-repository
 
-package com.johnromby_au518762.coronatrackerapp;
+package com.johnromby_au518762.coronatrackerapp.database;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -11,6 +11,10 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
+
+import com.johnromby_au518762.coronatrackerapp.utility.CsvUtil;
+import com.johnromby_au518762.coronatrackerapp.R;
+import com.johnromby_au518762.coronatrackerapp.model.Country;
 
 import java.util.List;
 
@@ -40,7 +44,7 @@ public abstract class CountryDatabase extends RoomDatabase {
         return instance;
     }
 
-    private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
+    private static final RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
@@ -48,9 +52,9 @@ public abstract class CountryDatabase extends RoomDatabase {
         }
     };
 
-    // TODO: Upgrade to use Executor instead, AsyncTask is deprecated!
+    // TODO (Improvement): Upgrade to use Executor instead, AsyncTask is deprecated!
     private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
-        private CountryDao countryDao;
+        private final CountryDao countryDao;
 
         public PopulateDbAsyncTask(CountryDatabase db) {
             countryDao = db.countryDao(); // This is only possible because onCreate is called after the database is created.

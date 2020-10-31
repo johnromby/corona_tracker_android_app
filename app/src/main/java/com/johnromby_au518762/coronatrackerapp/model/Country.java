@@ -1,4 +1,4 @@
-package com.johnromby_au518762.coronatrackerapp;
+package com.johnromby_au518762.coronatrackerapp.model;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;

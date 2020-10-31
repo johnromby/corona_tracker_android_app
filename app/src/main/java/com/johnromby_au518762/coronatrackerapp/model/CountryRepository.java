@@ -2,7 +2,7 @@
 // Also inspired by (E20) ITSMAP "L7 - Fragments and Advanced UI" Tracker demo app.
 // Lastly Async processing with Executor was inspired by (E20) ITSMAP "L4 - Persistence" room demo app.
 
-package com.johnromby_au518762.coronatrackerapp;
+package com.johnromby_au518762.coronatrackerapp.model;
 
 import android.util.Log;
 
@@ -24,8 +24,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import com.johnromby_au518762.coronatrackerapp.model.CountryLive;
-import com.johnromby_au518762.coronatrackerapp.model.Covid19ApiSummery;
+import com.johnromby_au518762.coronatrackerapp.App;
+import com.johnromby_au518762.coronatrackerapp.database.CountryDao;
+import com.johnromby_au518762.coronatrackerapp.database.CountryDatabase;
+import com.johnromby_au518762.coronatrackerapp.model.gson.CountryLive;
+import com.johnromby_au518762.coronatrackerapp.model.gson.Covid19ApiSummery;
 
 public class CountryRepository {
     // For debugging
@@ -40,6 +43,8 @@ public class CountryRepository {
     private static LiveData<List<Country>> allCountries;
     private static ArrayList<CountryLive> countriesLive;
     private static RequestQueue requestQueue;
+
+    private Country currentCountry;
 
     public CountryRepository() {
     }
@@ -62,8 +67,18 @@ public class CountryRepository {
         return instance;
     }
 
+    // region Simple Getters and Setters
+    public Country getCurrentCountry() {
+        return currentCountry;
+    }
+
+    public void setCurrentCountry(int index) {
+        this.currentCountry = allCountries.getValue().get(index);
+    }
+    // endregion
+
     //region Volley
-    // TODO: Should probably move all the Volley stuff to its own class.
+    // TODO (Improvement): Should probably move all the Volley stuff to its own class.
     //  OBS. Had some strange issues moving this to its own class, so it stays here for now!
     // Inspiration: https://www.youtube.com/watch?v=bRvLg27EWp0&list=PLrnPJCHvNZuBCiCxN8JPFI57Zhr5SusRL&index=4
     // And by E20-ITSMAP L6 Demo video: "Rick and Morty Gallery with Volley and Glide"
@@ -127,7 +142,8 @@ public class CountryRepository {
     }
     //endregion
 
-    //region Repository API methods. This is the abstraction layer between the ViewModel and the Room Database.
+    // region Repository API methods
+    // This is the abstraction layer between the ViewModel and the Room Database.
     public void insert(Country country) {
         insertCountryAsync(country);
     }
@@ -144,6 +160,10 @@ public class CountryRepository {
         deleteAllCountriesAsync();
     }
 
+    public Country getSingleCountry(int id) {
+        return getSingleCountryAsync(id);
+    }
+
     public Country getSingleRandomCountry() {
         return getSingleRandomCountryAsync();
     }
@@ -152,7 +172,7 @@ public class CountryRepository {
         return allCountries;
     }
 
-    // Async methods
+    // region Async methods
     private void insertCountryAsync(Country country){
         executor.execute(() -> countryDao.insert(country));
     }
@@ -161,6 +181,7 @@ public class CountryRepository {
         executor.execute(() -> countryDao.update(country));
     }
 
+    // Used directly in Volley
     private void updateAllCountries(List<CountryLive> countriesLive) {
         for (Country cc: allCountries.getValue()) {
             for (CountryLive live: countriesLive) {
@@ -192,6 +213,20 @@ public class CountryRepository {
         });
     }
 
+    private Country getSingleCountryAsync(int id) {
+        Future<Country> country = executor.submit(() -> countryDao.findCountry(id));
+
+        try {
+            return country.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     private Country getSingleRandomCountryAsync() {
         Future<Country> country = executor.submit(() -> countryDao.getSingleRandomCountry());
 
@@ -205,5 +240,6 @@ public class CountryRepository {
 
         return null;
     }
-    //endregion
+    // endregion
+    // endregion
 }

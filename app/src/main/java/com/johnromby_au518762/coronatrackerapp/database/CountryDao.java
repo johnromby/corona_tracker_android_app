@@ -1,6 +1,6 @@
 // Credit: https://codinginflow.com/tutorials/android/room-viewmodel-livedata-recyclerview-mvvm/part-3-dao-roomdatabase
 
-package com.johnromby_au518762.coronatrackerapp;
+package com.johnromby_au518762.coronatrackerapp.database;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -8,6 +8,8 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
+
+import com.johnromby_au518762.coronatrackerapp.model.Country;
 
 import java.util.List;
 
@@ -25,6 +27,9 @@ public interface CountryDao {
 
     @Query("DELETE FROM country_table")
     void deleteAllCountries();
+
+    @Query("SELECT * FROM country_table WHERE id LIKE :id")
+    Country findCountry(int id);
 
     // Inspired by: https://stackoverflow.com/questions/28249169/get-random-record-in-sqlite
     @Query("SELECT * FROM country_table ORDER BY RANDOM() LIMIT 1")

@@ -1,21 +1,24 @@
-package com.johnromby_au518762.coronatrackerapp;
+package com.johnromby_au518762.coronatrackerapp.utility;
 
 import android.content.Context;
 import android.util.Log;
+
+import com.johnromby_au518762.coronatrackerapp.model.Country;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 // TODO make this utility class generic.
 public final class CsvUtil {
-    private Context context;
-    private int resourceIdOfCsvFile;
-    private final String delimiter = ";";
+    private final Context context;
+    private final int resourceIdOfCsvFile;
+    private static final String delimiter = ";";
 
     // Debug Tag
     private static final String TAG = "CsvUtil";
@@ -32,7 +35,13 @@ public final class CsvUtil {
 
         // Creating the list of Country objects:
         InputStream is = context.getResources().openRawResource(resourceIdOfCsvFile);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+        BufferedReader reader = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+        } else {
+            //noinspection CharsetObjectCanBeUsed
+            reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+        }
 
         String line = "";
 

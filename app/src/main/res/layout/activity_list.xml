@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/activityBackgroundColor"
-    tools:context=".ListActivity">
+    tools:context=".view.ListActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvCountries"
@@ -70,7 +70,7 @@
         android:id="@+id/btnDeleteAll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="NUKE EM"
+        android:text="Nuke 'em, Rico!"
         android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@+id/btnAdd"
         app:layout_constraintStart_toEndOf="@+id/btnExit"

@@ -1,10 +1,13 @@
-package com.johnromby_au518762.coronatrackerapp;
+package com.johnromby_au518762.coronatrackerapp.viewmodel;
 
 import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+
+import com.johnromby_au518762.coronatrackerapp.model.CountryRepository;
+import com.johnromby_au518762.coronatrackerapp.model.Country;
 
 import java.util.List;
 
@@ -28,5 +31,9 @@ public class ListViewModel extends AndroidViewModel {
 
     public void deleteAll() {
         repository.deleteAllCountries();
+    }
+
+    public void updateSelectedCountry(int index) {
+        repository.setCurrentCountry(index);
     }
 }

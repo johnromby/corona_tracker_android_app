@@ -1,11 +1,20 @@
 
-package com.johnromby_au518762.coronatrackerapp.model;
+package com.johnromby_au518762.coronatrackerapp.model.gson;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Global {
+public class CountryLive {
 
+    @SerializedName("Country")
+    @Expose
+    private String country;
+    @SerializedName("CountryCode")
+    @Expose
+    private String countryCode;
+    @SerializedName("Slug")
+    @Expose
+    private String slug;
     @SerializedName("NewConfirmed")
     @Expose
     private Integer newConfirmed;
@@ -24,6 +33,36 @@ public class Global {
     @SerializedName("TotalRecovered")
     @Expose
     private Integer totalRecovered;
+    @SerializedName("Date")
+    @Expose
+    private String date;
+    @SerializedName("Premium")
+    @Expose
+    private Premium premium;
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
 
     public Integer getNewConfirmed() {
         return newConfirmed;
@@ -71,6 +110,22 @@ public class Global {
 
     public void setTotalRecovered(Integer totalRecovered) {
         this.totalRecovered = totalRecovered;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public Premium getPremium() {
+        return premium;
+    }
+
+    public void setPremium(Premium premium) {
+        this.premium = premium;
     }
 
 }

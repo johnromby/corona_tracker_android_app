@@ -20,6 +20,6 @@
     <string name="btnAdd">Add</string>
     <string name="txtSearchFieldHint">Search for country here…</string>
     <string name="NotificationChannelName">COVID-19 Data Service (Live)</string>
-    <string name="NotificationCompatTitle">"COVID-19 Data for: "</string>
-    <string name="NotificationCompatTicker">"Data brought to you by: "</string>
+    <string name="NotificationCompatTitle">COVID-19 Data for: </string>
+    <string name="NotificationCompatTicker">Data brought to you by: </string>
 </resources>

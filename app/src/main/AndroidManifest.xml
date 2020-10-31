@@ -15,13 +15,13 @@
         android:theme="@style/AppTheme"
         android:name=".App">
         <service
-            android:name=".UpdateService"
+            android:name=".service.ForegroundUpdateService"
             android:enabled="true"
             android:exported="false" />
 
-        <activity android:name=".EditActivity" />
-        <activity android:name=".DetailsActivity" />
-        <activity android:name=".ListActivity">
+        <activity android:name=".view.EditActivity" />
+        <activity android:name=".view.DetailsActivity" />
+        <activity android:name=".view.ListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -4,22 +4,25 @@
  Code comments are also taken from this video - although some are rewritten a bit - to personally get a better grasp on whats going on, and of course to remember various parts of the code for later review.
 */
 
-package com.johnromby_au518762.coronatrackerapp;
+package com.johnromby_au518762.coronatrackerapp.view;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.List;
+import com.johnromby_au518762.coronatrackerapp.view.adaptor.CountryAdapter;
+import com.johnromby_au518762.coronatrackerapp.viewmodel.ListViewModel;
+import com.johnromby_au518762.coronatrackerapp.R;
+import com.johnromby_au518762.coronatrackerapp.service.ForegroundUpdateService;
 
 public class ListActivity extends AppCompatActivity implements CountryAdapter.ICountryItemClickedListener {
     // For debugging
@@ -34,17 +37,28 @@ public class ListActivity extends AppCompatActivity implements CountryAdapter.IC
     private EditText editTextSearchField;
     private Button btnAdd;
     private Button btnExit;
-    private Button btnDeleteAll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
+        // TODO (Improvement): Title is a tad too long for portrait layout. Fix this!
         // Activity title
         setTitle(getResources().getText(R.string.app_name) + " - " + getResources().getText(R.string.listActivityTitle));
 
-        // Recyclerview Set-up (Adapter and Layout Manager)
+        // ViewModel + Recyclerview Set-up (Adapter and Layout Manager)
+        listActivityInit();
+
+        // Binding Widgets
+        bindWidgets();
+
+        // Starting ForegroundService (ForegroundUpdateService)
+        startService(new Intent(this, ForegroundUpdateService.class));
+    }
+
+    private void listActivityInit() {
+        // Setting up Recyclerview (Adapter and Layout Manager)
         adapter = new CountryAdapter(this);
         rcvList = findViewById(R.id.rcvCountries);
         rcvList.setHasFixedSize(true); // This increases performance for RecyclerViews that does not change their size.
@@ -53,13 +67,10 @@ public class ListActivity extends AppCompatActivity implements CountryAdapter.IC
 
         // Setting up ViewModel
         listViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(ListViewModel.class);
-        listViewModel.getAllCountries().observe(this, new Observer<List<Country>>() {
-            @Override
-            public void onChanged(List<Country> countries) {
-                adapter.updateCountryList(countries);
-            }
-        });
+        listViewModel.getAllCountries().observe(this, countries -> adapter.updateCountryList(countries));
+    }
 
+    private void bindWidgets() {
         // Country search field
         editTextSearchField = findViewById(R.id.editTextSearchField);
 
@@ -70,20 +81,16 @@ public class ListActivity extends AppCompatActivity implements CountryAdapter.IC
             public void onClick(View v) {
                 listViewModel.insert(editTextSearchField.getText().toString());
                 editTextSearchField.setText("");
-                // TODO Make a Toast or notification that shows if the country was added successfully or not.
+                // TODO (Improvement): Make a Toast or notification of some sort, that shows if the country was added successfully or not.
 //                Toast.makeText(ListActivity.this, "New country added: " + editTextSearchField.getText(), Toast.LENGTH_SHORT).show();
             }
         });
 
         btnExit = findViewById(R.id.btnExit);
-        btnExit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        btnExit.setOnClickListener(v -> finish());
 
-        btnDeleteAll = findViewById(R.id.btnDeleteAll);
+        // OBS. This button is hidden from view. Should only be used in engineering release.
+        Button btnDeleteAll = findViewById(R.id.btnDeleteAll);
         btnDeleteAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,16 +98,20 @@ public class ListActivity extends AppCompatActivity implements CountryAdapter.IC
                 Toast.makeText(ListActivity.this, "All data is now gone!", Toast.LENGTH_SHORT).show();
             }
         });
-
-        // Starting ForegroundService (UpdateService)
-        startService(new Intent(this, UpdateService.class));
     }
 
     // Callback when a country item is clicked in the list
     @Override
     public void onCountryClicked(int index) {
-        Toast.makeText(this, "Country with index: " + index + " clicked!", Toast.LENGTH_SHORT).show();
-        // TODO: Remove Toast and open DetailsActivity here.
-//        openDetailsActivity(countries.get(index));
+        listViewModel.updateSelectedCountry(index);
+        startActivity(new Intent(this, DetailsActivity.class));
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart: List Activity restarted.");
+        adapter.notifyDataSetChanged();
+        Log.d(TAG, "onRestart: List Activity RecyclerView updated.");
     }
 }

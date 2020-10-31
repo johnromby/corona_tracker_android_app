@@ -11,7 +11,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        instance = this;    //Android specifies that this is the first code to run in app, so should no be null from here on
+        instance = this;    //Android specifies that this is the first code to run in app, so should not be null from here on
     }
 
     //NB: Get Application context - ONLY for use outside UI (e.g. for repository)

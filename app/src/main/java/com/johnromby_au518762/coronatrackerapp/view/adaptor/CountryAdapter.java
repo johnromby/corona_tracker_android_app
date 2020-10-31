@@ -4,7 +4,7 @@
  Code comments are also taken from this video - although some are rewritten a bit - to personally get a better grasp on whats going on, and of course to remember various parts of the code for later review.
 */
 
-package com.johnromby_au518762.coronatrackerapp;
+package com.johnromby_au518762.coronatrackerapp.view.adaptor;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.johnromby_au518762.coronatrackerapp.R;
+import com.johnromby_au518762.coronatrackerapp.model.Country;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +34,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
     }
 
     // Callback interface for when the user clicks an country item in the RecycleView:
-    private ICountryItemClickedListener listener;
+    private final ICountryItemClickedListener listener;
 
     // Adapter data:
     private List<Country> countryList = new ArrayList<>();
@@ -64,8 +66,8 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
 
         // Current position taken from which country the user clicked:
         Country selectedCountry = countryList.get(position);
-        Log.d(TAG, "Selected Country is: " + selectedCountry.getCountryName());
 
+        // TODO (DRY): Maybe move this to a utility class!?
         // Binding txtViews etc. with the data from the selected country:
         // Inspired by E20-ITSMAP L6 Demo video: "Rick and Morty Gallery with Volley and Glide"
         Glide.with(holder.imgFlag.getContext())
@@ -82,7 +84,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
         return countryList.size();
     }
 
-    public class CountryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class CountryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         // ViewHolder UI Widget references:
         ImageView imgFlag;

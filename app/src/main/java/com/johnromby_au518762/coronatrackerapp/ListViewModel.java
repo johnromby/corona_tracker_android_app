@@ -19,7 +19,7 @@ public class ListViewModel extends AndroidViewModel {
     }
 
     public void insert(String countryName) {
-        repository.sendRequest(countryName);
+        repository.sendRequestForDailySummery(countryName);
     }
 
     public LiveData<List<Country>> getAllCountries() {

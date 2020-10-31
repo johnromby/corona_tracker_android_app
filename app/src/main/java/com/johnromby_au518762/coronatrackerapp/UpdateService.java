@@ -1,4 +1,4 @@
-// Most code taken from: (E20) ITSMAP "L5 - Services and Asynch Processing" DemoService project.
+// Credit: (E20) ITSMAP "L5 - Services and Asynch Processing" DemoService project.
 
 package com.johnromby_au518762.coronatrackerapp;
 
@@ -80,22 +80,25 @@ public class UpdateService extends Service {
             execService = Executors.newSingleThreadExecutor();
         }
 
-        execService.submit(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(SLEEP_TIMER);
-                    Notification notification = getNewNotification();
-                    NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    nm.notify(NOTIFICATION_ID, notification);
-                    Log.d(TAG, "Notification updated.");
-                } catch (InterruptedException e) {
-                    Log.e(TAG, "run: ERROR", e);
-                }
+        execService.submit(() -> {
+            try {
+                // Updates with fresh data from COVID-19 Web API
+                repository.sendRequestForDailySummery("");
 
-                if (started) {
-                    doRecursiveWork();
-                }
+                Thread.sleep(SLEEP_TIMER);
+
+                Notification notification = getNewNotification();
+                NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                nm.notify(NOTIFICATION_ID, notification);
+
+                Log.d(TAG, "Notification updated.");
+
+            } catch (InterruptedException e) {
+                Log.e(TAG, "run: ERROR", e);
+            }
+
+            if (started) {
+                doRecursiveWork();
             }
         });
     }

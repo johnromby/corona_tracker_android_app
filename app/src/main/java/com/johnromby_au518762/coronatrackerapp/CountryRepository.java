@@ -4,8 +4,6 @@
 
 package com.johnromby_au518762.coronatrackerapp;
 
-import android.app.Application;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -54,21 +52,22 @@ public class CountryRepository {
 
             executor = Executors.newSingleThreadExecutor();
 
-            CountryDatabase database = CountryDatabase.getInstance((Application) App.getAppContext());
+            CountryDatabase database = CountryDatabase.getInstance(App.getAppContext());
             countryDao = database.countryDao();
             allCountries = countryDao.getAllCountries();
 
-            requestQueue = Volley.newRequestQueue((Application) App.getAppContext());
+            requestQueue = Volley.newRequestQueue(App.getAppContext());
             countriesLive = new ArrayList<>();
         }
         return instance;
     }
 
-    //region Volley (Need to move this to its own class)
+    //region Volley
     // TODO: Should probably move all the Volley stuff to its own class.
+    //  OBS. Had some strange issues moving this to its own class, so it stays here for now!
     // Inspiration: https://www.youtube.com/watch?v=bRvLg27EWp0&list=PLrnPJCHvNZuBCiCxN8JPFI57Zhr5SusRL&index=4
     // And by E20-ITSMAP L6 Demo video: "Rick and Morty Gallery with Volley and Glide"
-    public void sendRequest(String countryName) {
+    public void sendRequestForDailySummery(String countryName) {
         String url = "https://api.covid19api.com/summary";
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -77,8 +76,10 @@ public class CountryRepository {
                     public void onResponse(String response) {
                         Log.d(TAG, "onResponse: " + response);
                         parseJson(response);
-                        CountryLive country = containsCountry(countryName);
-                        if (country != null) createCountry(country);
+                        if (!countryName.isEmpty() || countryName == null) {
+                            CountryLive country = containsCountry(countryName);
+                            if (country != null) createCountry(country);
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -121,23 +122,22 @@ public class CountryRepository {
         Covid19ApiSummery dailySummery = gson.fromJson(json, Covid19ApiSummery.class);
         if (dailySummery != null) {
             countriesLive.addAll(dailySummery.getCountries());
+            updateAllCountries(dailySummery.getCountries());
         }
     }
     //endregion
 
     //region Repository API methods. This is the abstraction layer between the ViewModel and the Room Database.
     public void insert(Country country) {
-        new InsertCountryAsyncTask(countryDao).execute(country);
+        insertCountryAsync(country);
     }
 
     public void update(Country country) {
-        new UpdateCountryAsyncTask(countryDao).execute(country);
+        updateCountryAsync(country);
     }
 
-    // TODO: updateAllCountries() { }
-
     public void delete(Country country) {
-        new DeleteCountryAsyncTask(countryDao).execute(country);
+        deleteCountryAsync(country);
     }
 
     public void deleteAllCountries() {
@@ -152,47 +152,37 @@ public class CountryRepository {
         return allCountries;
     }
 
-    // TODO: Should probably upgrade to use Executor instead, AsyncTask is deprecated!
-    private static class InsertCountryAsyncTask extends AsyncTask<Country, Void, Void> {
-        private CountryDao countryDao;
+    // Async methods
+    private void insertCountryAsync(Country country){
+        executor.execute(() -> countryDao.insert(country));
+    }
 
-        private InsertCountryAsyncTask(CountryDao countryDao) {
-            this.countryDao = countryDao;
-        }
+    private void updateCountryAsync(Country country){
+        executor.execute(() -> countryDao.update(country));
+    }
 
-        @Override
-        protected Void doInBackground(Country... countries) {
-            countryDao.insert(countries[0]);
-            return null;
+    private void updateAllCountries(List<CountryLive> countriesLive) {
+        for (Country cc: allCountries.getValue()) {
+            for (CountryLive live: countriesLive) {
+                if (live.getCountryCode().equals(cc.getCountryCode())) {
+                    Country country = new Country(
+                            live.getCountry(),
+                            live.getCountryCode(),
+                            live.getTotalConfirmed(),
+                            live.getTotalDeaths(),
+                            cc.getUserRating(),
+                            cc.getUserNote()
+                    );
+                    country.setId(cc.getId());
+                    update(country);
+                    Log.d(TAG, "updateAllCountries: Current country with country code " + cc.getCountryCode() + " just got updated.");
+                }
+            }
         }
     }
 
-    private static class UpdateCountryAsyncTask extends AsyncTask<Country, Void, Void> {
-        private CountryDao countryDao;
-
-        private UpdateCountryAsyncTask(CountryDao countryDao) {
-            this.countryDao = countryDao;
-        }
-
-        @Override
-        protected Void doInBackground(Country... countries) {
-            countryDao.update(countries[0]);
-            return null;
-        }
-    }
-
-    private static class DeleteCountryAsyncTask extends AsyncTask<Country, Void, Void> {
-        private CountryDao countryDao;
-
-        private DeleteCountryAsyncTask(CountryDao countryDao) {
-            this.countryDao = countryDao;
-        }
-
-        @Override
-        protected Void doInBackground(Country... countries) {
-            countryDao.delete(countries[0]);
-            return null;
-        }
+    private void deleteCountryAsync(Country country){
+        executor.execute(() -> countryDao.delete(country));
     }
 
     private void deleteAllCountriesAsync() {

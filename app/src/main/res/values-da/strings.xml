@@ -3,8 +3,8 @@
     <string name="app_name">au518762 Corona Tracker 2</string>
     <string name="btnExit">Luk</string>
     <string name="txtCountryName">Nations Navn</string>
-    <string name="txtCases">"Tilfælde: "</string>
-    <string name="txtDeaths">"Dødsfald: "</string>
+    <string name="txtCases">Tilfælde: </string>
+    <string name="txtDeaths">Dødsfald: </string>
     <string name="txtUserRating">Bedømmelse:</string>
     <string name="txtUserNotes">Noter:</string>
     <string name="btnBack">Tilbage</string>

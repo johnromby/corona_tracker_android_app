@@ -2,8 +2,8 @@
     <string name="app_name">au518762 Corona Tracker 2</string>
     <string name="btnExit">Exit</string>
     <string name="txtCountryName">Country Name</string>
-    <string name="txtCases">"Cases: "</string>
-    <string name="txtDeaths">"Deaths: "</string>
+    <string name="txtCases">Cases: </string>
+    <string name="txtDeaths">Deaths: </string>
     <string name="imgCountryFlagDescription">Current country flag</string>
     <string name="txtUserRating">User rating:</string>
     <string name="txtUserNotes">User notes:</string>

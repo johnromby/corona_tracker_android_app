@@ -26,7 +26,7 @@ public class DetailsActivity extends AppCompatActivity {
     // Widgets
     private ImageView imgFlag;
     private TextView txtCountryName, txtCasesNum, txtDeathsNum, txtUserRatingNum, txtMLUserNotes;
-    private Button btnBack, btnEdit;
+    private Button btnBack, btnDelete, btnEdit;
 
     // Data holder
     private Country selectedCountry;
@@ -63,8 +63,16 @@ public class DetailsActivity extends AppCompatActivity {
         // Binding to Buttons
         btnBack = findViewById(R.id.btnBack);
         btnBack.setOnClickListener(v -> finish());
+        btnDelete = findViewById(R.id.btnDelete);
+        btnDelete.setOnClickListener(v -> deleteCurrentCountry());
         btnEdit = findViewById(R.id.btnEdit);
         btnEdit.setOnClickListener(v -> openEditActivity());
+    }
+
+    private void deleteCurrentCountry() {
+        Toast.makeText(this, selectedCountry.getCountryName() + " removed!", Toast.LENGTH_SHORT).show();
+        detailsViewModel.deleteCurrentCountry(selectedCountry);
+        finish();
     }
 
     private void openEditActivity() {

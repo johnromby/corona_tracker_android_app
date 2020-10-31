@@ -133,9 +133,8 @@
         android:layout_width="88dp"
         android:layout_height="wrap_content"
         android:text="@string/btnEdit"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/txtMLUserNotes"
-        app:layout_constraintTop_toTopOf="@+id/guideline6" />
+        app:layout_constraintTop_toTopOf="@+id/btnDelete" />
 
     <Button
         android:id="@+id/btnBack"
@@ -159,4 +158,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_end="64dp" />
+
+    <Button
+        android:id="@+id/btnDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btnDelete"
+        app:layout_constraintStart_toStartOf="@+id/txtMLUserNotes"
+        app:layout_constraintTop_toTopOf="@+id/btnBack" />
 </androidx.constraintlayout.widget.ConstraintLayout>

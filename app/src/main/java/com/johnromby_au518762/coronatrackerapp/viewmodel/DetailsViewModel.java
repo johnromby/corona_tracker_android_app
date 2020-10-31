@@ -20,7 +20,7 @@ public class DetailsViewModel extends AndroidViewModel {
         return repository.getCurrentCountry();
     }
 
-    public void deleteCurrentCountry(Country country) {
-        repository.delete(country);
+    public void deleteCurrentCountry(Country selectedCountry) {
+        repository.delete(selectedCountry);
     }
 }

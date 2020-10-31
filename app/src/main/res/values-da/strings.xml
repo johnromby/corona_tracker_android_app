@@ -23,4 +23,5 @@
     <string name="NotificationChannelName">Coronavirus Data Service (Live)</string>
     <string name="NotificationCompatTitle">Coronavirus tal for: </string>
     <string name="NotificationCompatTicker">Data leveret af: </string>
+    <string name="btnDelete">Slet</string>
 </resources>

@@ -24,7 +24,7 @@ public abstract class CountryDatabase extends RoomDatabase {
     private static final String TAG = "CountryDatabase";
     // Singleton
     private static CountryDatabase instance;
-    // Used to access our Dao
+    // Used to access our Dao (Mandatory getter for DAO)
     public abstract CountryDao countryDao();
     // List to hold countries from csv file
     private static List<Country> countries;

@@ -125,6 +125,7 @@ public class ForegroundUpdateService extends Service {
     @Override
     public void onDestroy() {
         started = false;
+        Log.d(TAG, "onDestroy: Service destroyed");
         super.onDestroy();
     }
 }

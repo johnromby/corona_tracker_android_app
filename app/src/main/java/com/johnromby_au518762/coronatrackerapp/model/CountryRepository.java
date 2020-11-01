@@ -10,8 +10,6 @@ import androidx.lifecycle.LiveData;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
@@ -41,7 +39,7 @@ public class CountryRepository {
 
     private static CountryDao countryDao;
     private static LiveData<List<Country>> allCountries;
-    private static ArrayList<CountryLive> countriesLive;
+    private static Covid19ApiSummery covid19ApiSummery;
     private static RequestQueue requestQueue;
 
     private Country currentCountry;
@@ -62,7 +60,7 @@ public class CountryRepository {
             allCountries = countryDao.getAllCountries();
 
             requestQueue = Volley.newRequestQueue(App.getAppContext());
-            countriesLive = new ArrayList<>();
+            covid19ApiSummery = new Covid19ApiSummery();
         }
         return instance;
     }
@@ -86,22 +84,14 @@ public class CountryRepository {
         String url = "https://api.covid19api.com/summary";
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d(TAG, "onResponse: " + response);
-                        parseJson(response);
-                        if (!countryName.isEmpty() || countryName == null) {
-                            CountryLive country = containsCountry(countryName);
-                            if (country != null) createCountry(country);
-                        }
+                response -> {
+                    Log.d(TAG, "onResponse: " + response);
+                    parseJson(response);
+                    if (!countryName.isEmpty() || countryName == null) {
+                        CountryLive country = containsCountry(countryName);
+                        if (country != null) createCountry(country);
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "That did not work!", error);
-            }
-        });
+                }, error -> Log.e(TAG, "That did not work!", error));
 
         requestQueue.add(stringRequest);
     }
@@ -123,7 +113,7 @@ public class CountryRepository {
     }
 
     private CountryLive containsCountry(String countryName) {
-        for (CountryLive currentCountry : countriesLive) {
+        for (CountryLive currentCountry : covid19ApiSummery.getCountries()) {
             if (currentCountry.getCountry().toLowerCase().equals(countryName.toLowerCase()) ||
                     currentCountry.getCountryCode().toLowerCase().equals(countryName.toLowerCase())) {
                 return currentCountry;
@@ -134,11 +124,16 @@ public class CountryRepository {
 
     private void parseJson(String json) {
         Gson gson = new GsonBuilder().create();
-        Covid19ApiSummery dailySummery = gson.fromJson(json, Covid19ApiSummery.class);
-        if (dailySummery != null) {
-            countriesLive.addAll(dailySummery.getCountries());
-            updateAllCountries(dailySummery.getCountries());
-        }
+        Covid19ApiSummery freshData = gson.fromJson(json, Covid19ApiSummery.class);
+
+        // Returns if data from web API is empty and also returns if the date from web API data is the same as the one got previously.
+        if (freshData == null || freshData.getDate().equals(covid19ApiSummery.getDate())) return;
+
+        // The Covid19ApiSummery model object only updates when the app loads the first time and when new data is available from the web API.
+        covid19ApiSummery = freshData;
+
+        // Updates all the countries with the new data form the web API.
+        updateAllCountries(covid19ApiSummery.getCountries());
     }
     //endregion
 

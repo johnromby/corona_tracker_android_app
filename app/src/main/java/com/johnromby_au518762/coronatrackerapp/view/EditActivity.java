@@ -27,6 +27,7 @@ public class EditActivity extends AppCompatActivity {
     private ImageView imgFlag;
     private TextView txtCountryName, txtUserRatingNum, txtMLUserNotes;
     private SeekBar seekBarUserRating;
+    private Button btnOk, btnCancel;
 
     // Data holder
     private Country selectedCountry;
@@ -74,15 +75,16 @@ public class EditActivity extends AppCompatActivity {
         });
 
         // Binding to Buttons
-        Button btnCancel = findViewById(R.id.btnCancel);
-        btnCancel.setOnClickListener(v -> finish());
-        Button btnOk = findViewById(R.id.btnOk);
+        btnOk = findViewById(R.id.btnOk);
         btnOk.setOnClickListener(v -> goBackToDetailsActivity());
+        btnCancel = findViewById(R.id.btnCancel);
+        btnCancel.setOnClickListener(v -> finish());
     }
 
     private void goBackToDetailsActivity() {
         selectedCountry.setUserRating(Double.parseDouble(txtUserRatingNum.getText().toString()));
         selectedCountry.setUserNote(txtMLUserNotes.getText().toString());
+        editViewModel.updateSelectedCountry(selectedCountry);
         finish();
     }
 

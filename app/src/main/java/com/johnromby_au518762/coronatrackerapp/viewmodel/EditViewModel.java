@@ -19,4 +19,8 @@ public class EditViewModel extends AndroidViewModel {
     public Country getCurrentCountry() {
         return repository.getCurrentCountry();
     }
+
+    public void updateSelectedCountry(Country selectedCountry) {
+        repository.update(selectedCountry);
+    }
 }

@@ -2,6 +2,7 @@
  NOTES:
  Inspiration was drawn from the video made by Kasper Løvborg Jensen: "Demo 2: RecyclerView in action" under Lesson 3 (L3: Android UI) ITSMAP-01 fall 2020.
  Code comments are also taken from this video - although some are rewritten a bit - to personally get a better grasp on whats going on, and of course to remember various parts of the code for later review.
+ Credit for ViewModel part goes to: https://codinginflow.com/tutorials/android/room-viewmodel-livedata-recyclerview-mvvm/part-5-viewmodel
 */
 
 package com.johnromby_au518762.coronatrackerapp.view;
@@ -66,6 +67,8 @@ public class ListActivity extends AppCompatActivity implements CountryAdapter.IC
         rcvList.setAdapter(adapter);
 
         // Setting up ViewModel
+        // Credit to this ("Eventually I found this next line worked for me."): https://stackoverflow.com/questions/62226803/room-viewmodel-livedata-recyclerview-mvvm-part-7-add-note-activity-a
+        // Because of deprecation mentioned here: https://stackoverflow.com/questions/53903762/viewmodelproviders-is-deprecated-in-1-1-0
         listViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(ListViewModel.class);
         listViewModel.getAllCountries().observe(this, countries -> adapter.updateCountryList(countries));
     }

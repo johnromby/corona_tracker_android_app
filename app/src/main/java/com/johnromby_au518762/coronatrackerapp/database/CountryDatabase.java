@@ -18,7 +18,7 @@ import com.johnromby_au518762.coronatrackerapp.model.Country;
 
 import java.util.List;
 
-@Database(entities = {Country.class}, version = 1)
+@Database(entities = {Country.class}, version = 1, exportSchema = false)
 public abstract class CountryDatabase extends RoomDatabase {
     // Debug Tag
     private static final String TAG = "CountryDatabase";

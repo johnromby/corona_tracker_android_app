@@ -5,6 +5,7 @@
 package com.johnromby_au518762.coronatrackerapp.model;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 
@@ -100,7 +101,10 @@ public class CountryRepository {
         // Checking for duplicate entry
         List<Country> tmpList = getAllCountries().getValue();
         for (int i = 0; i < tmpList.size(); i++) {
-            if (tmpList.get(i).getCountryCode().equals(country.getCountryCode())) return;
+            if (tmpList.get(i).getCountryCode().equals(country.getCountryCode())) {
+                Toast.makeText(App.getAppContext(), "Country: " + country.getCountry() + " already exist!", Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
 
         Country newCountry = new Country(
@@ -110,6 +114,7 @@ public class CountryRepository {
                 country.getTotalDeaths(),
                 0.0, "");
         insert(newCountry);
+        Toast.makeText(App.getAppContext(), "Country: " + country.getCountry() + " added!", Toast.LENGTH_SHORT).show();
     }
 
     private CountryLive containsCountry(String countryName) {

@@ -25,6 +25,9 @@ import com.johnromby_au518762.coronatrackerapp.viewmodel.ListViewModel;
 import com.johnromby_au518762.coronatrackerapp.R;
 import com.johnromby_au518762.coronatrackerapp.service.ForegroundUpdateService;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class ListActivity extends AppCompatActivity implements CountryAdapter.ICountryItemClickedListener {
     // For debugging
     private static final String TAG = "ListActivity";
@@ -54,8 +57,18 @@ public class ListActivity extends AppCompatActivity implements CountryAdapter.IC
         // Binding Widgets
         bindWidgets();
 
-        // Starting ForegroundService (ForegroundUpdateService)
-        startService(new Intent(this, ForegroundUpdateService.class));
+        Intent intent = new Intent(this, ForegroundUpdateService.class);
+
+        // Starting ForegroundService (ForegroundUpdateService) with delay to fix a crash.
+        // https://stackoverflow.com/a/4562300
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                //run your service
+                startService(intent);
+            }
+        }, 2000);
     }
 
     private void listActivityInit() {

@@ -41,9 +41,6 @@ public class DetailsActivity extends AppCompatActivity {
         // TODO (nice-to-have): Maybe bind on the LiveData for the selected country?
         //  This way when new data are fetched from the web api it will also show in this activity.
 
-        // Getting current selected Country
-        selectedCountry = detailsViewModel.getCurrentCountry();
-
         // Binding Widgets
         bindWidgets();
 
@@ -69,17 +66,10 @@ public class DetailsActivity extends AppCompatActivity {
         btnEdit.setOnClickListener(v -> openEditActivity());
     }
 
-    private void deleteCurrentCountry() {
-        Toast.makeText(this, selectedCountry.getCountryName() + " removed!", Toast.LENGTH_SHORT).show();
-        detailsViewModel.deleteCurrentCountry(selectedCountry);
-        finish();
-    }
-
-    private void openEditActivity() {
-        startActivity(new Intent(this, EditActivity.class));
-    }
-
     private void updateView() {
+        // Getting current selected Country
+        selectedCountry = detailsViewModel.getCurrentCountry();
+
         // Activity title
         setTitle(getResources().getText(R.string.detailsActivityTitle) + ": " + selectedCountry.getCountryName());
 
@@ -96,6 +86,23 @@ public class DetailsActivity extends AppCompatActivity {
         txtDeathsNum.setText(selectedCountry.getNumDeathAsString());
         txtUserRatingNum.setText(selectedCountry.getUserRatingAsString());
         txtMLUserNotes.setText(selectedCountry.getUserNote());
+    }
+
+    private void deleteCurrentCountry() {
+        Toast.makeText(this, selectedCountry.getCountryName() + " removed!", Toast.LENGTH_SHORT).show();
+        detailsViewModel.deleteCurrentCountry(selectedCountry);
+        finish();
+    }
+
+    private void openEditActivity() {
+        startActivity(new Intent(this, EditActivity.class));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: Details Activity resumed.");
+        updateView();
     }
 
     @Override
